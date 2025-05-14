@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-3
+pragma solidity ^0.8.15;
+
+import "./BaseTest.sol";
+
+contract VotingTest is BaseTest {
+    function setUp() public {
+        setupContracts(block.timestamp);
+    }
 
     function testRewardTokenAddition() public{
 
@@ -24,3 +33,5 @@
         assertEq(IBribe(bribeAddress).rewards(rewardsLength-1),usdc); 
         
     }
+
+}
