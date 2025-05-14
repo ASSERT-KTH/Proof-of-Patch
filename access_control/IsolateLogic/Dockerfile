@@ -1,0 +1,57 @@
+# Use an official Foundry image
+FROM ghcr.io/foundry-rs/foundry
+
+# Define build arguments for the repository URL and the clone destination path.
+ARG REPO_URL="https://github.com/code-423n4/2024-07-benddao.git" 
+ARG CLONE_DESTINATION="/app/cloned_repo"
+
+# --- START: Install Node.js, npm, and global yarn ---
+# Switch to root user to install packages.
+USER root
+
+# Install prerequisites for adding NodeSource repository and Node.js itself
+RUN apt-get update && \
+    apt-get install -y ca-certificates curl gnupg && \
+    mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+
+# Add the NodeSource repository for Node.js LTS (e.g., version 20.x)
+# You can change NODE_MAJOR to another version if needed, e.g., 18, 22
+ENV NODE_MAJOR 20
+RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+
+# Install Node.js (which includes npm)
+RUN apt-get update && \
+    apt-get install -y nodejs && \
+    # Clean up apt cache to reduce image size
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install yarn AND typescript globally using the now available npm (still as root)
+RUN npm install --global yarn typescript
+
+# Switch back to the default foundry user for subsequent operations.
+# The foundry base image usually runs as a non-root user 'foundry' (UID 1000).
+USER foundry
+# --- END: Install Node.js, npm, and global yarn ---
+
+# Set the working directory for the clone operation.
+WORKDIR /app
+
+# Clone the repository.
+# --depth 1 creates a shallow clone, downloading only the latest commit.
+RUN echo "Cloning repository from ${REPO_URL} into ${CLONE_DESTINATION}..." && \
+    git clone --depth 1 "${REPO_URL}" "${CLONE_DESTINATION}" && \
+    echo "Cloning complete."
+
+# Set the working directory to the cloned repository.
+WORKDIR "${CLONE_DESTINATION}"
+
+RUN yarn
+
+# Copy PoC into the cloned repository test environment.
+COPY PoC/TestIntIsolateLiquidate.t.sol /app/cloned_repo/test/integration/TestIntIsolateLiquidate.t.sol
+
+# Build the environment and run the test
+RUN forge build
+RUN forge test --match-contract TestIntIsolateLiquidate --match-test test_Anyone_Can_LiquidateWETH
