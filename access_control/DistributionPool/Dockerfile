@@ -1,9 +1,12 @@
-# Use an official Foundry image
-FROM ghcr.io/foundry-rs/foundry
+# Use Node.js as the base image
+FROM node:20
 
 # Define build arguments for the repository URL and the clone destination path.
-ARG REPO_URL="https://github.com/alchemix-finance/alchemix-v2-dao.git" 
+ARG REPO_URL="https://github.com/Mylifechangefast/2023-12-the-standard.git" 
 ARG CLONE_DESTINATION="/app/cloned_repo"
+
+# Install Hardhat globally
+RUN npm install -g hardhat
 
 # Set the working directory for the clone operation.
 WORKDIR /app
@@ -17,9 +20,15 @@ RUN echo "Cloning repository from ${REPO_URL} into ${CLONE_DESTINATION}..." && \
 # Set the working directory to the cloned repository.
 WORKDIR "${CLONE_DESTINATION}"
 
+# Install project-specific dependencies
+# This is a crucial step!
+RUN echo "Installing project dependencies..." && \
+    npm install && \
+    echo "Project dependencies installed."
+
 # Copy PoC into the cloned repository test environment.
-COPY PoC/Voting.t.sol /app/cloned_repo/src/test/Voting.t.sol
+COPY PoC/test/liquidationPoolManager.js /app/cloned_repo/test/liquidationPoolManager.js
+COPY PoC/test/DistributeAssetsExploit.sol /app/cloned_repo/contracts/DistributeAssetsExploit.sol
 
 # Build the environment and run the test
-RUN forge build
-RUN forge test --mt testRewardTokenAddition --rpc-url https://eth-mainnet.g.alchemy.com/v2/aA2nkPDT5ZcPX5S2R32XLUHNI5feX1dx -vv
+RUN npx hardhat test test/liquidationPoolManager.js

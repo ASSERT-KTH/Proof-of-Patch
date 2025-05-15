@@ -1,8 +1,14 @@
+# -------------------------------- NOTE -------------------------------- #
+# This test will not work unless a private key is added
+# to /PoC/test/.env
+# The test is validated to run with a private key
+# ---------------------------------------------------------------------- #
+
 # Use an official Foundry image
 FROM ghcr.io/foundry-rs/foundry
 
 # Define build arguments for the repository URL and the clone destination path.
-ARG REPO_URL="https://github.com/alchemix-finance/alchemix-v2-dao.git" 
+ARG REPO_URL="https://github.com/code-423n4/2024-01-decent.git" 
 ARG CLONE_DESTINATION="/app/cloned_repo"
 
 # Set the working directory for the clone operation.
@@ -18,8 +24,9 @@ RUN echo "Cloning repository from ${REPO_URL} into ${CLONE_DESTINATION}..." && \
 WORKDIR "${CLONE_DESTINATION}"
 
 # Copy PoC into the cloned repository test environment.
-COPY PoC/Voting.t.sol /app/cloned_repo/src/test/Voting.t.sol
+COPY PoC/UTBReceiveFromBridge.t.sol /app/cloned_repo/test/UTBReceiveFromBridge.t.sol
+COPY PoC/test/.env /app/cloned_repo/.env
 
 # Build the environment and run the test
 RUN forge build
-RUN forge test --mt testRewardTokenAddition --rpc-url https://eth-mainnet.g.alchemy.com/v2/aA2nkPDT5ZcPX5S2R32XLUHNI5feX1dx -vv
+RUN forge test --match-test testUTBReceiveFromBridge_

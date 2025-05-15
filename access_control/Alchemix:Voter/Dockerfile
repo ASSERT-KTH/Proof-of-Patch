@@ -22,4 +22,4 @@ COPY PoC/Voting.t.sol /app/cloned_repo/src/test/Voting.t.sol
 
 # Build the environment and run the test
 RUN forge build
-RUN forge test --mt testRewardTokenAddition --rpc-url https://eth-mainnet.g.alchemy.com/v2/aA2nkPDT5ZcPX5S2R32XLUHNI5feX1dx -vv
+RUN forge test --mt testPocAccrueFluxMultipleTimes --rpc-url https://eth-mainnet.g.alchemy.com/v2/aA2nkPDT5ZcPX5S2R32XLUHNI5feX1dx -vv

@@ -1,4 +1,14 @@
-function testPocAccrueFluxMultipleTimes() public {
+// SPDX-License-Identifier: GPL-3
+pragma solidity ^0.8.15;
+
+import "./BaseTest.sol";
+
+contract VotingTest is BaseTest {
+    function setUp() public {
+        setupContracts(block.timestamp);
+    }
+
+    function testPocAccrueFluxMultipleTimes() public {
         uint256 tokenId = createVeAlcx(admin, TOKEN_1, MAXTIME, true);
         address[] memory pools = new address[](1);
         pools[0] = alETHPool;
@@ -16,3 +26,5 @@ function testPocAccrueFluxMultipleTimes() public {
         console.log("increased flux balance",flux.getUnclaimedFlux(tokenId));
         assertGt(unclaimedFlux_2,unclaimedFlux_1);
     }
+
+}

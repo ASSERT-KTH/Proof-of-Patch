@@ -1,4 +1,24 @@
-function test_any_non_owner_can_see_password() public {
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.18;
+
+import {Test, console} from "forge-std/Test.sol";
+import {PasswordStore} from "../src/PasswordStore.sol";
+import {DeployPasswordStore} from "../script/DeployPasswordStore.s.sol";
+
+contract PasswordStoreTest is Test {
+    PasswordStore public passwordStore;
+    DeployPasswordStore public deployer;
+    address public owner;
+    address public attacker;
+
+    function setUp() public {
+        deployer = new DeployPasswordStore();
+        passwordStore = deployer.run();
+        owner = msg.sender;
+        attacker = makeAddr("attacker");
+    }
+
+    function test_any_non_owner_can_see_password() public {
     string memory victimPassword = "mySecretPassword"; // Defines Victim's (Owner's) password
     vm.startPrank(owner); // Simulates Victim's address for the next call
     passwordStore.setPassword(victimPassword); // Victim sets their password
@@ -23,4 +43,5 @@ function test_any_non_owner_can_see_password() public {
     );
     // Exposes Victim's password on console
     console.log(anyoneCanReadPassword);
+    }
 }

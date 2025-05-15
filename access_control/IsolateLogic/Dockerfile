@@ -15,23 +15,21 @@ RUN apt-get update && \
     mkdir -p /etc/apt/keyrings && \
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 
-# Add the NodeSource repository for Node.js LTS (e.g., version 20.x)
-# You can change NODE_MAJOR to another version if needed, e.g., 18, 22
+# Add the NodeSource repository for Node.js LTS
 ENV NODE_MAJOR 20
 RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
 
-# Install Node.js (which includes npm)
+# Install Node.js
 RUN apt-get update && \
     apt-get install -y nodejs && \
     # Clean up apt cache to reduce image size
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Install yarn AND typescript globally using the now available npm (still as root)
+# Install yarn AND typescript globally using the now available npm
 RUN npm install --global yarn typescript
 
 # Switch back to the default foundry user for subsequent operations.
-# The foundry base image usually runs as a non-root user 'foundry' (UID 1000).
 USER foundry
 # --- END: Install Node.js, npm, and global yarn ---
 
@@ -47,6 +45,7 @@ RUN echo "Cloning repository from ${REPO_URL} into ${CLONE_DESTINATION}..." && \
 # Set the working directory to the cloned repository.
 WORKDIR "${CLONE_DESTINATION}"
 
+# Run yarn
 RUN yarn
 
 # Copy PoC into the cloned repository test environment.

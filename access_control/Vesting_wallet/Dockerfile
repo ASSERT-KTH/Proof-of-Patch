@@ -2,7 +2,7 @@
 FROM ghcr.io/foundry-rs/foundry
 
 # Define build arguments for the repository URL and the clone destination path.
-ARG REPO_URL="https://github.com/alchemix-finance/alchemix-v2-dao.git" 
+ARG REPO_URL="https://github.com/code-423n4/2024-01-salty.git" 
 ARG CLONE_DESTINATION="/app/cloned_repo"
 
 # Set the working directory for the clone operation.
@@ -18,8 +18,8 @@ RUN echo "Cloning repository from ${REPO_URL} into ${CLONE_DESTINATION}..." && \
 WORKDIR "${CLONE_DESTINATION}"
 
 # Copy PoC into the cloned repository test environment.
-COPY PoC/Voting.t.sol /app/cloned_repo/src/test/Voting.t.sol
+COPY PoC/DAO.t.sol /app/cloned_repo/src/dao/tests/DAO.t.sol
 
 # Build the environment and run the test
 RUN forge build
-RUN forge test --mt testRewardTokenAddition --rpc-url https://eth-mainnet.g.alchemy.com/v2/aA2nkPDT5ZcPX5S2R32XLUHNI5feX1dx -vv
+RUN COVERAGE="yes" NETWORK="sep" forge test -vv --rpc-url https://eth-sepolia.g.alchemy.com/v2/aA2nkPDT5ZcPX5S2R32XLUHNI5feX1dx --match-test testTeamRewardIsLockedInUpkeep
