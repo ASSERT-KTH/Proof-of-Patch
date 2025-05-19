@@ -1,0 +1,161 @@
+The PoC has been verified almost as described by the audit.
+
+Locally, the suggested command "COVERAGE="yes" forge test -f wss://ethereum-sepolia.publicnode.com -vvv --mc H2" worked.
+With docker, id did not. The command "forge test --mc H2 --rpc-url https://eth-sepolia.g.alchemy.com/v2/aA2nkPDT5ZcPX5S2R32XLUHNI5feX1dx"
+was used instead.
+
+
+Result from running PoC:
+
+(base) linussvensson@Linuss-MacBook-Air 2024-01-salty % forge test -f wss://ethereum-sepolia.publicnode.com -vvv --mc H2
+[⠊] Compiling...
+No files changed, compilation skipped
+
+Ran 4 tests for src/pools/tests/H2.t.sol:H2
+[PASS] testMovePrice10PercentsFor1000EtherPools() (gas: 8038440)
+Logs:
+  
+__BEFORE
+  TOKENA reserves: 1e21
+  WETH reserves: 1e21
+  WETH price in TOKENA: 1e18
+  
+  weth.balanceOf(ALICE): 1e24
+  tokenA.balanceOf(ALICE): 1e24
+  
+__AFTER
+  TOKENA reserves: 1.050000985416972439018e21
+  WETH reserves: 9.52380058579548631764e20
+  WETH price in TOKENA: 1.102502069376613168e18
+  
+  weth.balanceOf(ALICE): 1.000071411092309891703573e24
+  tokenA.balanceOf(ALICE): 9.99925e23
+  weth.balanceOf(ALICE) diff: 7.1411092309891703573e19
+  tokenA.balanceOf(ALICE) diff: 7.5e19
+  Losses for the attacker (before swapping back): 3.588907690108296427e18
+  
+__AFTER_EXCHANGING_BACK
+  Gas second(while) loop:  3704803
+  stepsCount 96
+  TOKENA reserves: 9.99630412887065445666e20
+  WETH reserves: 1.00036972375807088327e21
+  WETH price in TOKENA: 9.99260962368764938e17
+  
+  weth.balanceOf(ALICE): 9.99999411092309891703573e23
+  tokenA.balanceOf(ALICE): 1.000000552695578329303756e24
+  weth.balanceOf(ALICE) diff: -5.88907690108296427e17
+  tokenA.balanceOf(ALICE) diff: 5.52695578329303756e17
+  Diff (positive=profit) for the attacker: -3.6212111778992671e16
+  Arbitrage profits for DAO: 3.6007442826841177e16
+
+[PASS] testMovePrice3PercentsFor1000EtherPools() (gas: 8144739)
+Logs:
+  
+__BEFORE
+  TOKENA reserves: 1e21
+  WETH reserves: 1e21
+  WETH price in TOKENA: 1e18
+  
+  weth.balanceOf(ALICE): 1e24
+  tokenA.balanceOf(ALICE): 1e24
+  
+__AFTER
+  TOKENA reserves: 1.015334580999584348256e21
+  WETH reserves: 9.84897016917824622243e20
+  WETH price in TOKENA: 1.030904311373601509e18
+  
+  weth.balanceOf(ALICE): 1.000022650911092810985092e24
+  tokenA.balanceOf(ALICE): 9.99977e23
+  weth.balanceOf(ALICE) diff: 2.2650911092810985092e19
+  tokenA.balanceOf(ALICE) diff: 2.3e19
+  Losses for the attacker (before swapping back): 3.49088907189014908e17
+  
+__AFTER_EXCHANGING_BACK
+  Gas second(while) loop:  3819739
+  stepsCount 99
+  TOKENA reserves: 9.99921412324285856874e20
+  WETH reserves: 1.000078593852222314893e21
+  WETH price in TOKENA: 9.99842830824594487e17
+  
+  weth.balanceOf(ALICE): 9.99999880911092810985092e23
+  tokenA.balanceOf(ALICE): 1.000000115549660196721462e24
+  weth.balanceOf(ALICE) diff: -1.19088907189014908e17
+  tokenA.balanceOf(ALICE) diff: 1.15549660196721462e17
+  Diff (positive=profit) for the attacker: -3.539246992293446e15
+  Arbitrage profits for DAO: 3.529298045738274e15
+
+[PASS] testMovePrice3PercentsFor100EtherPools() (gas: 8144716)
+Logs:
+  
+__BEFORE
+  TOKENA reserves: 1e20
+  WETH reserves: 1e20
+  WETH price in TOKENA: 1e18
+  
+  weth.balanceOf(ALICE): 1e24
+  tokenA.balanceOf(ALICE): 1e24
+  
+__AFTER
+  TOKENA reserves: 1.01533904446182814654e20
+  WETH reserves: 9.8489268727968747021e19
+  WETH price in TOKENA: 1.030913375208658232e18
+  
+  weth.balanceOf(ALICE): 1.000002265070645156548576e24
+  tokenA.balanceOf(ALICE): 9.999977e23
+  weth.balanceOf(ALICE) diff: 2.265070645156548576e18
+  tokenA.balanceOf(ALICE) diff: 2.3e18
+  Losses for the attacker (before swapping back): 3.4929354843451424e16
+  
+__AFTER_EXCHANGING_BACK
+  Gas second(while) loop:  3819692
+  stepsCount 99
+  TOKENA reserves: 9.9991812520363329252e19
+  WETH reserves: 1.00008188150039788069e20
+  WETH price in TOKENA: 9.99836257110748863e17
+  
+  weth.balanceOf(ALICE): 9.99999988070645156548576e23
+  tokenA.balanceOf(ALICE): 1.000000011535043306710765e24
+  weth.balanceOf(ALICE) diff: -1.1929354843451424e16
+  tokenA.balanceOf(ALICE) diff: 1.1535043306710765e16
+  Diff (positive=profit) for the attacker: -3.94311536740659e14
+  Arbitrage profits for DAO: 3.92423968527001e14
+
+[PASS] testMovePrice3PercentsFor10EtherPools() (gas: 8139476)
+Logs:
+  
+__BEFORE
+  TOKENA reserves: 1e19
+  WETH reserves: 1e19
+  WETH price in TOKENA: 1e18
+  
+  weth.balanceOf(ALICE): 1e24
+  tokenA.balanceOf(ALICE): 1e24
+  
+__AFTER
+  TOKENA reserves: 1.0153859129666537062e19
+  WETH reserves: 9.848472262908388556e18
+  WETH price in TOKENA: 1.031008552251124844e18
+  
+  weth.balanceOf(ALICE): 1.000000226486760259426612e24
+  tokenA.balanceOf(ALICE): 9.9999977e23
+  weth.balanceOf(ALICE) diff: 2.26486760259426612e17
+  tokenA.balanceOf(ALICE) diff: 2.3e17
+  Losses for the attacker (before swapping back): 3.513239740573388e15
+  
+__AFTER_EXCHANGING_BACK
+  Gas second(while) loop:  3814513
+  stepsCount 99
+  TOKENA reserves: 9.998739277265897017e18
+  WETH reserves: 1.0001260881696325131e19
+  WETH price in TOKENA: 9.99747871347397507e17
+  
+  weth.balanceOf(ALICE): 9.99999998786760259426612e23
+  tokenA.balanceOf(ALICE): 1.000000001133369347977977e24
+  weth.balanceOf(ALICE) diff: -1.213239740573388e15
+  tokenA.balanceOf(ALICE) diff: 1.133369347977977e15
+  Diff (positive=profit) for the attacker: -7.9870392595411e13
+  Arbitrage profits for DAO: 7.8722649397356e13
+
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 4.94s (896.01ms CPU time)
+
+Ran 1 test suite in 5.27s (4.94s CPU time): 4 tests passed, 0 failed, 0 skipped (4 total tests)
