@@ -1,0 +1,38 @@
+
+
+(To old version of Solidity)
+docker build --platform linux/amd64 --no-cache --progress=plain -t your-image-name .
+
+This is the result from running PoC-vuln:
+(base) linussvensson@Linuss-MacBook-Air contracts % forge test --mp foundry_test/PoC-vuln.t.sol
+[⠊] Compiling...
+[⠒] Compiling 1 files with Solc 0.4.26
+[⠆] Compiling 148 files with Solc 0.8.17
+[⠒] Solc 0.4.26 finished in 85.47ms
+[⠢] Solc 0.8.17 finished in 2.96s
+Compiler run successful with warnings:
+
+/* Warnings */
+
+Ran 1 test for foundry_test/PoC-vuln.t.sol:AuditPriceFeedTest
+[PASS] testPriceChangeOver50PerCent() (gas: 111653)
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 15.83ms (718.50µs CPU time)
+
+Ran 1 test suite in 153.94ms (15.83ms CPU time): 1 tests passed, 0 failed, 0 skipped (1 total tests)
+
+
+This is the result from running PoC-exploit:
+
+(base) linussvensson@Linuss-MacBook-Air contracts % forge test --mp foundry_test/PoC-exp.t.sol 
+[⠊] Compiling...
+[⠃] Compiling 12 files with Solc 0.8.17
+[⠒] Solc 0.8.17 finished in 1.92s
+Compiler run successful with warnings:
+
+/* Warnings */
+
+Ran 1 test for foundry_test/PoC-exp.t.sol:AuditArbitrageTest
+[PASS] testArbitragePriceChangeOver50PerCent() (gas: 842571)
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 19.47ms (2.15ms CPU time)
+
+Ran 1 test suite in 170.64ms (19.47ms CPU time): 1 tests passed, 0 failed, 0 skipped (1 total tests)

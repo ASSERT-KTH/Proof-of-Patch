@@ -1,0 +1,19 @@
+            // If Chainlink price has changed by > 50% between two consecutive rounds, compare it to Fallback's price
+-           if (_chainlinkPriceChangeAboveMax(chainlinkResponse, prevChainlinkResponse)) {
++           if (_chainlinkPriceChangeAboveMax(chainlinkResponse, prevChainlinkResponse) && address(fallbackCaller) != address(0)) {
+                // If Fallback is broken, both oracles are untrusted, and return last good price
+                // We don't trust CL for now given this large price differential
+                if (_fallbackIsBroken(fallbackResponse)) {
+                    _changeStatus(Status.bothOraclesUntrusted);
+                    return lastGoodPrice;
+                }
+
+    (...)
+
+            // If Chainlink is live but deviated >50% from it's previous price and Fallback is still untrusted, switch
+            // to bothOraclesUntrusted and return last good price
+-           if (_chainlinkPriceChangeAboveMax(chainlinkResponse, prevChainlinkResponse)) {
++           if (_chainlinkPriceChangeAboveMax(chainlinkResponse, prevChainlinkResponse) && address(fallbackCaller) != address(0)) {
+                _changeStatus(Status.bothOraclesUntrusted);
+                return lastGoodPrice;
+            }
