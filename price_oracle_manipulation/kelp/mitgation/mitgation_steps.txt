@@ -1,0 +1,2 @@
+An additional parameter could be added to the [depositAsset](https://github.com/code-423n4/2023-11-kelp/blob/c5fdc2e62c5e1d78769f44d6e34a6fb9e40c00f0/src/LRTDepositPool.sol#L119C14-L119C26) 
+function, to let users decide the minimum amount of tokens to be received, with a relative check after minting.
