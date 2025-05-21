@@ -1,0 +1,41 @@
+I originally thought the best way to mitigate this kind of attack is to scale the TWAP calculation based on the filled amount vs 
+the total fill amount of the whole market. However the downside with this approach is that the fill amount will perpetually 
+increase (given it's a perpetual market after all!) and so the market TWAP deviations from the oracle TWAP would decrease and so 
+the premium emissions would also decrease over time. This could be argued as a feature in that early users receive a larger premium 
+than later users.
+
+Upon further thought I think the best way to prevent this kind of attack is simply to disincentivise the malicious user from 
+doing so; by making this a net-loss situation. This can be done with a combination of the following:
+
+* Increasing minimum order size
+
+* Increasing trader/maker fees
+
+* Introducing another fixed fee per order (rather than only variable rate fees)
+
+* Capping the maximum position size (both long and short)
+
+* Reducing the maximum price deviation of fill prices from oracle price
+
+* Increasing the minimum margin requirements
+
+This will vary per perpetual market, but the key thing that needs to be accomplished is that the cost to a user to place 
+orders to control the market TWAP is greater than the premium that can be obtained from their position. This will also require 
+some estimates as to how frequently users are going to be placing orders. If orders are relatively infrequent then increasing the 
+TWAP calculation from 1 hour will also help with this.
+
+It is also worth considering whether the following lines in `_calcTwap` are overly weighted towards the last fill price:
+
+       // If there is no trade in the last period, return the last trade price
+        if (markPriceTwapData.lastTimestamp <= lastPeriodStart) {
+            return markPriceTwapData.lastPrice;
+        }
+
+You could make the argument that if no trades have occurred in a significant period of time then the market TWAP should revert back 
+to the oracle TWAP and premium emissions should halt. This could either be after one empty period, or X number of empty periods to 
+be defined by Hubble.
+
+Finally, having a trader able to hold both sides of the same perpetual in the same order makes this attack easier to implement, 
+so it might be worth adding an extra check to prevent this. However it's worth noting the same could be achieved with 2 accounts 
+assuming they alternated the long/short positions between them to avoid excessive margin requirements. So I'm not sure this is 
+strictly necessary.

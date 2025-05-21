@@ -1,6 +1,6 @@
+This PoC was verified as described in the audit, the command to run docker is slightly different:
 
-
-(To old version of Solidity)
+(Too old version of Solidity)
 docker build --platform linux/amd64 --no-cache --progress=plain -t your-image-name .
 
 This is the result from running PoC-vuln:
