@@ -1,0 +1,28 @@
+The PoC has been verified as described in the audit:
+
+This is the result from running the PoC (it is meant to revert):
+
+(base) linussvensson@Linuss-MacBook-Air 2025-02-thorwallet % npx hardhat test ./test/hardhat/MergeTgt.test.ts
+Could not find MNEMONIC or PRIVATE_KEY environment variables. It will not be possible to execute transactions in your example.
+
+  Audit MergeTgt tests
+    General tests
+      1) Users can't claim if more than TGT limit is deposited
+
+
+  0 passing (738ms)
+  1 failing
+
+  1) Audit MergeTgt tests
+       General tests
+         Users can't claim if more than TGT limit is deposited:
+     Error: VM Exception while processing transaction: reverted with custom error 'ERC20InsufficientBalance("0x5FC8d32690cc91D4c39d9d3abcBD16989F875707", 173699970000000000000000000, 173699999700000000000000000)'
+    at Titn.lzReceive (@layerzerolabs/oapp-evm/contracts/oapp/OAppReceiver.sol:103)
+    at Titn._transfer (@openzeppelin/contracts/token/ERC20/ERC20.sol:173)
+    at Titn.transfer (@openzeppelin/contracts/token/ERC20/ERC20.sol:106)
+    at Titn.transfer (contracts/Titn.sol:58)
+    at MergeTgt._callOptionalReturn (@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol:163)
+    at MergeTgt.safeTransfer (@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol:34)
+    at MergeTgt.claimTitn (contracts/MergeTgt.sol:109)
+    at EdrProviderWrapper.request (node_modules/hardhat/src/internal/hardhat-network/provider/provider.ts:398:41)
+    at async EthersProviderWrapper.send (node_modules/@nomiclabs/hardhat-ethers/src/internal/ethers-provider-wrapper.ts:13:20)

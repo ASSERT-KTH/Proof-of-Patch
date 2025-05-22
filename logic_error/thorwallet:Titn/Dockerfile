@@ -31,7 +31,3 @@ COPY PoC/Titn.test.ts /app/cloned_repo/test/hardhat/Titn.test.ts
 
 # Build the environment and run the test
 RUN npx hardhat test ./test/hardhat/Titn.test.ts
-
-#yarn
-#npm install --save-dev "@layerzerolabs/devtools-evm@~1.0.6"
-#npx hardhat test ./test/hardhat/Titn.test.ts

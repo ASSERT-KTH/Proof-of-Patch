@@ -1,0 +1,17 @@
+Limit the total deposits to TGT*TO*EXCHANGE by tracking how much TGT has already been deposited.
+MergeTgt.sol
+
+    uint256 public totalTgtDeposited;
+    ...
+    function onTokenTransfer(address from, uint256 amount, bytes calldata extraData) external nonReentrant {
+    ...
+    if (totalTgtDeposited + amount > TGT_TO_EXCHANGE) {
+        revert TGTExceeded();
+    }
+    totalTgtDeposited += amount;
+    }
+
+Or
+
+the same idea, but limit the `totalTitnClaimable` by TITN\_ARB value. This will likely be more efficient, as the rate 
+tgt/titn is dynamic.
