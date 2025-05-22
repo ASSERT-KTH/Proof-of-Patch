@@ -1,0 +1,14 @@
+Set the 25% quorum correctly:
+
+    constructor(
+        string memory _name,
+        IVotes _token,
+        Agent _agent
+    )
+        Governor(_name)
+        GovernorVotes(_token)
+-       GovernorVotesQuorumFraction(4) // quorum is 25% (1/4th) of supply
++       GovernorVotesQuorumFraction(25) // quorum is 25% (1/4th) of supply
+    {
+        agent = _agent;
+    }
