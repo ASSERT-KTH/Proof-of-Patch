@@ -1,0 +1,41 @@
+1. **Replace** **`isBridgedTokenHolder`** **with a** **`bridgedBalances`** **mapping** to track the *exact amount* 
+of bridged tokens per address:
+
+   mapping(address => uint256) public bridgedBalances;
+
+1. **Modify** **`_credit`** **to Increment Bridged Balance**:
+   Update the bridging logic to accumulate bridged amounts:
+
+   function _credit(...) internal override ... {
+      bridgedBalances[_to] += _amountLD; // Track bridged amount
+   }
+
+1. **Update Transfer Validation Logic**:
+Restrict transfers *only* if the amount exceeds the non-bridged balance:
+
+   function _validateTransfer(...) internal view {
+      uint256 nonBridged = balanceOf(from) - bridgedBalances[from];
+      if (amount > nonBridged && to != allowedAddress) {
+          revert BridgedTokensTransferLocked();
+      }
+   }
+
+1. **Decrement Bridged Balance on Approved Transfers**:
+When tokens are sent to `lzEndpoint` or `transferAllowedContract`, reduce `bridgedBalances`:
+
+   function transfer(...) public override ... {
+      super.transfer(...);
+      if (to == lzEndpoint || to == transferAllowedContract) {
+          bridgedBalances[from] = bridgedBalances[from] > amount
+              ? bridgedBalances[from] - amount
+              : 0;
+      }
+   }
+
+**Benefits**
+
+* **Precision**: Only bridged tokens are restricted; non-bridged tokens remain freely transferable.
+
+* **No DoS Vector**: Attackers cannot lock users’ non-bridged tokens by sending trivial bridged amounts.
+
+* **Backward Compatibility**: Maintains existing protocol invariants while fixing the critical flaw.
