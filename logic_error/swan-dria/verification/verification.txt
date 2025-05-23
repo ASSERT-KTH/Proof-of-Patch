@@ -1,0 +1,21 @@
+The PoC has been verified as described in the audit.
+
+This is the relevant output from running the PoC:
+
+Request status before validation: 2
+Validating with validator at index 0 with address: 0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f
+Score being used: 0, Task ID: 1
+Validation succeeded for validator at index 0
+Validating with validator at index 1 with address: 0xa0Ee7A142d267C1f36714E4a8F75612F20a79720
+Score being used: 1, Task ID: 1
+Validation succeeded for validator at index 1
+Validating with validator at index 2 with address: 0xBcd4042DE499D14e55001CcbB24a551F3b954096
+Score being used: 0, Task ID: 1
+Validation succeeded for validator at index 2
+Validating with validator at index 3 with address: 0x71bE63f3384f5fb98995898A86B02Fb2426c5788
+Score being used: 1, Task ID: 1
+Validation succeeded for validator at index 3
+Validating with validator at index 4 with address: 0xFABB0ac9d68B0B445fB7357272Ff202C5651694a
+Score being used: 2, Task ID: 1
+Validation failed for validator at index 4: VM Exception while processing transaction: reverted with panic code 0x11 (Arithmetic operation overflowed outside of an unchecked block)
+Request status after all validations: 2
