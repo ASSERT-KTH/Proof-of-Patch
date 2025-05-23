@@ -1,0 +1,25 @@
+To fix the integer‐division issue, **scale up** the difference by `1e18` before dividing by the original deposit value. This 
+ensures fractional parts are not truncated to zero. Specifically:
+
+1. **Modify the computation of** `lpTokenDepositValueChange`:
+
+    localData.lpTokenDepositValueChange =
+    -   (int256(localData.lpTokenDepositValueNow) - int256(localData.lpTokenDepositValue)) /
+    +   (int256(localData.lpTokenDepositValueNow) - int256(localData.lpTokenDepositValue)) * 1e18 /
+        int256(localData.lpTokenDepositValue);
+
+1. **Remove the extra** **`* 1e18`** **factor** (or equivalently, do not multiply by `1e18` a second time) when computing 
+`feePerLP`:
+
+    if (localData.lpTokenDepositValueChange > 0) {
+        feePerLP =
+    -       (uint256(localData.lpTokenDepositValueChange) * (uint256(feeDataArray[i].upliftFeeBps) * 1e18))
+    +       uint256(localData.lpTokenDepositValueChange) * uint256(feeDataArray[i].upliftFeeBps)
+            / 10000;
+    } else {
+        feePerLP = (uint256(minWithdrawalFeeBps) * 1e18) / 10000;
+    }
+
+With these changes, `lpTokenDepositValueChange` accurately represents a **scaled fraction** of growth (e.g., `0.5e18` for a 50% gain). 
+The subsequent fee logic then compares it against zero as intended, preventing the protocol from under‐charging fees on modest or 
+moderate gains. This aligns the computed fee with the pool’s actual value appreciation.
