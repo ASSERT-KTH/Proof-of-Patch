@@ -126,9 +126,8 @@ def main():
     login(driver)
     pagination = 1
     urls = []
-    categories = ["access control", "price oracle manipulation", "logic error", "lack of input validation", "reentrancy",
-                  "unchecked external calls", "flash loan", "integer overflow", "integer underflow", "insecure randomness",
-                  "denial of service (DoS)"]
+    #, "price oracle manipulation", "logic error", "lack of input validation", "reentrancy", "unchecked external calls", "flash loan", "integer overflow", "integer underflow", "insecure randomness", "denial of service (DoS)"
+    categories = ["access control"]
     results = {}
 
     # For every OWASP top 10 category, find audits with PoC segments with included code-blocks
@@ -139,6 +138,8 @@ def main():
             if not search_results:
                 break
             urls.extend(search_results)
+            if pagination == 2: # FOR DEMO
+                break # FOR DEMO
             pagination += 1
         if len(urls) == 0:
             logging.error("No search results found")
