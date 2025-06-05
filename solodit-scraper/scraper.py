@@ -1,5 +1,6 @@
 import json
 import logging
+from datetime import date
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
@@ -10,11 +11,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 import urllib.parse
 from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException
 
 # Setting up basic configuration for logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def construct_url(impact, pagination=1, search_term="access control"):
+def construct_url(impact, pagination=1, search_term=""):
     # Define the base URL
     base_url = "https://solodit.cyfrin.io/"
 
@@ -84,20 +86,49 @@ def search_solodit(driver, search_term, page):
     except Exception as e:
         logging.error(f"An unknown error occurred: {e}")
     
-def find_codeblock_after_poc(driver):
+def find_codeblock_or_text_or_link_after_poc(driver): # HERE I HAVE TO CHANGE THE LOGIC FOR IT TO SAVE IT IN THE WAY I WANT IT TO
     # Match any heading level with id='poc' or 'proof-of-concept'
     siblings = driver.find_elements(
         By.XPATH, "//*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6][@id='poc' or @id='proof-of-concept']/following-sibling::*"
     )
 
+    if not siblings:
+            logging.info("PoC section found, but it has no content.")
+            return False
+
     # Search for a code-block under the poc-heading
+    code, link, text = False, False, False
     for sibling in siblings:
         tag = sibling.tag_name.lower()
         if tag in {"h1", "h2", "h3", "h4", "h5", "h6"}:
             break  # Stop at next heading
         if tag == "milkdown-code-block":
             logging.info(f"Found a codeblock in the PoC section")
-            return True
+            code = True
+        if sibling.find_elements(By.TAG_NAME, 'a'):
+            logging.info("Found a link in the PoC section.")
+            link = True
+        if tag in {"p", "ul"}:
+            logging.info("Found text in the PoC section")
+            text = True
+
+    result = ""
+    if code:
+        result = "code"
+    if link:
+        if result != "":
+            result = result + ", link"
+        else:
+            result = "link"
+    if text: 
+        if result != "":
+            result = result + ", text"
+        else:
+            result = "text"
+
+    if result != "":
+        return result
+    
     logging.info(f"Did not find a codeblock in the PoC section")
     return False
 
@@ -112,13 +143,37 @@ def find_PoC(driver, url):
             )
         )
         print("Found PoC header, now checking for code block before next heading")
-        return find_codeblock_after_poc(driver)
+        return find_codeblock_or_text_or_link_after_poc(driver)
     except TimeoutException:
         logging.warning("PoC header not found within timeout.")
         return False
     except Exception as e:
         logging.error(f"An unknown error occurred: {e}")
         return False
+
+def find_rarity_quality_bounty_impact(driver):
+    logging.info("Starting to look for rarity, quality, bounty, and impact")
+    results = {'Rarity': 0, 'Quality': 0}
+    try:
+        rarity = driver.find_elements(By.XPATH, "//span[text()='Rarity']/following-sibling::div[1]/button")
+        results['Rarity'] = len(rarity)
+
+        quality = driver.find_elements(By.XPATH, "//span[text()='Quality']/following-sibling::div[1]/button")
+        results['Quality'] = len(quality)
+
+        impact = driver.find_element(By.XPATH, "//span[text()='HIGH' or text()='MED']")
+        results['Impact'] = impact.text
+
+        try:
+            bounty = driver.find_element(By.XPATH, "//span[contains(text(), 'USDC')]")
+            results['Bounty'] = bounty.text
+        except NoSuchElementException:
+            logging.info("No bounty was listed on this page. Continuing.")
+            pass
+    except Exception as e:
+        logging.error(f"An unknown error occurred: {e}")
+        return False
+    return results
     
 def main():
     # Setup the driver and login
@@ -138,16 +193,22 @@ def main():
             if not search_results:
                 break
             urls.extend(search_results)
-            if pagination == 2: # FOR DEMO
+            if pagination == 1: # FOR DEMO
                 break # FOR DEMO
             pagination += 1
         if len(urls) == 0:
             logging.error("No search results found")
             return
         urls_with_poc = []
+        # HERE I WANT TO APPEND A LOT OF OTHER STUFF AND MAYBE ADD SOME FUNCTIONS
         for url in urls:
-            if find_PoC(driver, url):
-                urls_with_poc.append(url)
+            PoC_finding = find_PoC(driver, url)
+            if PoC_finding:
+                extra_parameters = find_rarity_quality_bounty_impact(driver)
+                if extra_parameters:
+                    urls_with_poc.append(
+                        [date.today().isoformat(), url, PoC_finding] + [f"{k}: {v}" for k, v in extra_parameters.items()]
+                    )
         results[category] = urls_with_poc
         urls_with_poc = []
         pagination = 0

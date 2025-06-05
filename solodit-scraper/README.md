@@ -24,4 +24,5 @@ Tester mail address to login when running the scraper:
 Mail: tester_linus@outlook.com
 Password: testertester@123
 
-GAINED HELP FROM: https://github.com/OnchainGuard/OnchainGuard/blob/main/src/solidit-scrapping/parser.py 
+Took some inspiration: https://github.com/OnchainGuard/OnchainGuard/blob/main/src/solidit-scrapping/parser.py 
+However, most of the scraper had to be developed independently.
