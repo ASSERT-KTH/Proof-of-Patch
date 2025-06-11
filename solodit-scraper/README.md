@@ -1,12 +1,16 @@
 Dependencies:
 
-To install all the required dependencies, run:
+Parser specific dependencies:
+    export OPENAI_API_KEY="YOUR_KEY_HERE"
+    pip install openai
+
+To install all the required dependencies, run: (CHANGECHANGECHANGE)
 
 pip install -r requirements.txt
 
 Run:
 
-To run the solodit-scraper, use following command in the ../solodit-scraper terminal:
+To run the solodit-scraper, use following command in the ../solodit-scraper terminal (CHANGE THIS):
 
 /Users/linussvensson/Desktop/exjobb/VeriSet/solodit-scraper/.venv/bin/python /Users/linussvensson/Desktop/exjobb/VeriSet/solodit-scraper/scraper.py
 

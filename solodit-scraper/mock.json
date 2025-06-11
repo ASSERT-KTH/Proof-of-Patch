@@ -1,0 +1,80 @@
+{
+    "access control": [
+        [
+            "2025-06-06",
+            "https://solodit.cyfrin.io/issues/m-4-lack-of-access-control-in-setworkerpublickey-in-blueprintcoresol-which-results-users-to-lose-funds-sherlock-crestal-network-git",
+            "text",
+            "Rarity: 5",
+            "Quality: 5",
+            "Impact: MED",
+            "Bounty: 14500 USDC"
+        ],
+        [
+            "2025-06-06",
+            "https://solodit.cyfrin.io/issues/missing-access-control-for-claiming-rewards-halborn-jigsaw-finance-pendle-strategies-v1-markdown",
+            "code, text",
+            "Rarity: 5",
+            "Quality: 5",
+            "Impact: MED"
+        ],
+        [
+            "2025-06-06",
+            "https://solodit.cyfrin.io/issues/lack-of-access-control-in-receivemessage-in-assetcontroller-contract-halborn-lucid-labs-contracts-v1-markdown",
+            "code, text",
+            "Rarity: 5",
+            "Quality: 5",
+            "Impact: HIGH"
+        ],
+        [
+            "2025-06-06",
+            "https://solodit.cyfrin.io/issues/broken-functionality-of-remoteprotocolproxy-due-to-access-control-halborn-concrete-spokes-v1-markdown",
+            "code",
+            "Rarity: 5",
+            "Quality: 5",
+            "Impact: MED"
+        ],
+        [
+            "2025-06-06",
+            "https://solodit.cyfrin.io/issues/lack-of-access-control-in-pong-handlers-halborn-concrete-hub-v1-markdown",
+            "code",
+            "Rarity: 5",
+            "Quality: 5",
+            "Impact: HIGH"
+        ]
+    ],
+    "price oracle manipulation": [
+        [
+            "2025-06-06",
+            "https://solodit.cyfrin.io/issues/m-4-lack-of-access-control-in-setworkerpublickey-in-blueprintcoresol-which-results-users-to-lose-funds-sherlock-crestal-network-git",
+            "text",
+            "Rarity: 5",
+            "Quality: 5",
+            "Impact: MED",
+            "Bounty: 14500 USDC"
+        ],
+        [
+            "2025-06-06",
+            "https://solodit.cyfrin.io/issues/missing-access-control-for-claiming-rewards-halborn-jigsaw-finance-pendle-strategies-v1-markdown",
+            "code, text",
+            "Rarity: 5",
+            "Quality: 5",
+            "Impact: MED"
+        ],
+        [
+            "2025-06-06",
+            "https://solodit.cyfrin.io/issues/lack-of-access-control-in-receivemessage-in-assetcontroller-contract-halborn-lucid-labs-contracts-v1-markdown",
+            "code, text",
+            "Rarity: 5",
+            "Quality: 5",
+            "Impact: HIGH"
+        ],
+        [
+            "2025-06-06",
+            "https://solodit.cyfrin.io/issues/broken-functionality-of-remoteprotocolproxy-due-to-access-control-halborn-concrete-spokes-v1-markdown",
+            "code",
+            "Rarity: 5",
+            "Quality: 5",
+            "Impact: MED"
+        ]
+    ]
+}

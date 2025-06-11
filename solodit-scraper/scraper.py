@@ -151,18 +151,29 @@ def find_PoC(driver, url):
         logging.error(f"An unknown error occurred: {e}")
         return False
 
-def find_rarity_quality_bounty_impact(driver):
+def find_date_authors_bounty_impact(driver):
     logging.info("Starting to look for rarity, quality, bounty, and impact")
-    results = {'Rarity': 0, 'Quality': 0}
+    results = {}
     try:
-        rarity = driver.find_elements(By.XPATH, "//span[text()='Rarity']/following-sibling::div[1]/button")
-        results['Rarity'] = len(rarity)
-
-        quality = driver.find_elements(By.XPATH, "//span[text()='Quality']/following-sibling::div[1]/button")
-        results['Quality'] = len(quality)
-
         impact = driver.find_element(By.XPATH, "//span[text()='HIGH' or text()='MED']")
         results['Impact'] = impact.text
+
+        publication_date = driver.find_element(By.XPATH, "//*[contains(@class, 'text-smn') and contains(@class, 'text-start') and contains(@class, 'text-gray-500')]/span[1]")
+        results['Publication date'] = publication_date.text.removesuffix(" -")
+
+        authors = driver.find_element(By.XPATH, "//*[contains(@class, 'text-start') and contains(@class, 'text-sm') and contains(@class, 'text-gray-800') and starts-with(normalize-space(.), 'Author(s)')]")
+        author_string = authors.text.removeprefix("Author(s): ")
+        if author_string.endswith(" more"):
+            parts = author_string.split(" and ")
+            list_part = parts[0]
+            summary_part = parts[1]
+            explicit_count = len(list_part.split(","))
+            number_str = summary_part.replace(" more", "").strip()
+            more_count = int(number_str)
+            nr_authors = explicit_count + more_count
+        else:
+            nr_authors = len(author_string.split(","))
+        results['Nr of authors'] = nr_authors
 
         try:
             bounty = driver.find_element(By.XPATH, "//span[contains(text(), 'USDC')]")
@@ -179,39 +190,42 @@ def main():
     # Setup the driver and login
     driver = setup_driver()
     login(driver)
-    pagination = 1
-    urls = []
+    #pagination = 1
+    #urls = []
     #, "price oracle manipulation", "logic error", "lack of input validation", "reentrancy", "unchecked external calls", "flash loan", "integer overflow", "integer underflow", "insecure randomness", "denial of service (DoS)"
-    categories = ["access control"]
+    categories = ["access control", "price oracle manipulation", "logic error", "lack of input validation", "reentrancy", 
+                  "unchecked external calls", "flash loan", "integer overflow", "integer underflow", "insecure randomness", 
+                  "denial of service (DoS)"]
     results = {}
 
     # For every OWASP top 10 category, find audits with PoC segments with included code-blocks
     for category in categories:
+        urls = []
+        pagination = 1
         logging.info(f"Looking at the category: {category}")
         while True:
             search_results = search_solodit(driver, category, pagination)
             if not search_results:
                 break
             urls.extend(search_results)
-            if pagination == 1: # FOR DEMO
-                break # FOR DEMO
+            #if pagination == 1: # FOR DEMO
+                #break # FOR DEMO
             pagination += 1
         if len(urls) == 0:
             logging.error("No search results found")
             return
         urls_with_poc = []
-        # HERE I WANT TO APPEND A LOT OF OTHER STUFF AND MAYBE ADD SOME FUNCTIONS
         for url in urls:
             PoC_finding = find_PoC(driver, url)
             if PoC_finding:
-                extra_parameters = find_rarity_quality_bounty_impact(driver)
+                extra_parameters = find_date_authors_bounty_impact(driver)
                 if extra_parameters:
                     urls_with_poc.append(
                         [date.today().isoformat(), url, PoC_finding] + [f"{k}: {v}" for k, v in extra_parameters.items()]
                     )
         results[category] = urls_with_poc
-        urls_with_poc = []
-        pagination = 0
+        #urls_with_poc = []
+        #pagination = 0
 
     # Create a .json file with the links to the audits found
     with open("results.json", "w") as f:
