@@ -12,6 +12,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import urllib.parse
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import NoSuchElementException
+from bs4 import BeautifulSoup
 
 # Setting up basic configuration for logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -86,7 +87,7 @@ def search_solodit(driver, search_term, page):
     except Exception as e:
         logging.error(f"An unknown error occurred: {e}")
     
-def find_codeblock_or_text_or_link_after_poc(driver): # HERE I HAVE TO CHANGE THE LOGIC FOR IT TO SAVE IT IN THE WAY I WANT IT TO
+def find_codeblock_or_text_or_link_after_poc(driver):
     # Match any heading level with id='poc' or 'proof-of-concept'
     siblings = driver.find_elements(
         By.XPATH, "//*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6][@id='poc' or @id='proof-of-concept']/following-sibling::*"
@@ -97,36 +98,25 @@ def find_codeblock_or_text_or_link_after_poc(driver): # HERE I HAVE TO CHANGE TH
             return False
 
     # Search for a code-block under the poc-heading
-    code, link, text = False, False, False
+    result = []
     for sibling in siblings:
         tag = sibling.tag_name.lower()
         if tag in {"h1", "h2", "h3", "h4", "h5", "h6"}:
             break  # Stop at next heading
         if tag == "milkdown-code-block":
             logging.info(f"Found a codeblock in the PoC section")
-            code = True
+            if "code" not in result:
+                result.append("code")
         if sibling.find_elements(By.TAG_NAME, 'a'):
             logging.info("Found a link in the PoC section.")
-            link = True
+            if "link" not in result:
+                result.append("link")
         if tag in {"p", "ul"}:
             logging.info("Found text in the PoC section")
-            text = True
+            if "text" not in result:
+                result.append("text")
 
-    result = ""
-    if code:
-        result = "code"
-    if link:
-        if result != "":
-            result = result + ", link"
-        else:
-            result = "link"
-    if text: 
-        if result != "":
-            result = result + ", text"
-        else:
-            result = "text"
-
-    if result != "":
+    if result:
         return result
     
     logging.info(f"Did not find a codeblock in the PoC section")
@@ -156,13 +146,17 @@ def find_date_authors_bounty_impact(driver):
     results = {}
     try:
         impact = driver.find_element(By.XPATH, "//span[text()='HIGH' or text()='MED']")
-        results['Impact'] = impact.text
+        results['impact'] = impact.text
 
         publication_date = driver.find_element(By.XPATH, "//*[contains(@class, 'text-smn') and contains(@class, 'text-start') and contains(@class, 'text-gray-500')]/span[1]")
-        results['Publication date'] = publication_date.text.removesuffix(" -")
+        results['publication_date'] = publication_date.text.removesuffix(" -")
+
+        client_source_link = driver.find_element(By.XPATH, "//a[@class='text-gray-800 underline']")
+        results['client_source_link'] = client_source_link.get_attribute('href')
 
         authors = driver.find_element(By.XPATH, "//*[contains(@class, 'text-start') and contains(@class, 'text-sm') and contains(@class, 'text-gray-800') and starts-with(normalize-space(.), 'Author(s)')]")
         author_string = authors.text.removeprefix("Author(s): ")
+        results['authors'] = author_string
         if author_string.endswith(" more"):
             parts = author_string.split(" and ")
             list_part = parts[0]
@@ -173,25 +167,60 @@ def find_date_authors_bounty_impact(driver):
             nr_authors = explicit_count + more_count
         else:
             nr_authors = len(author_string.split(","))
-        results['Nr of authors'] = nr_authors
+        results['n_authors'] = nr_authors
 
+        results['total_bounty'] = 0
         try:
             bounty = driver.find_element(By.XPATH, "//span[contains(text(), 'USDC')]")
-            results['Bounty'] = bounty.text
+            results['total_bounty'] = bounty.text
         except NoSuchElementException:
             logging.info("No bounty was listed on this page. Continuing.")
             pass
+
+        webpage_text = get_audit_content(driver)
+        results['audit_content'] = webpage_text
+
     except Exception as e:
         logging.error(f"An unknown error occurred: {e}")
         return False
     return results
+
+def get_audit_content(driver):
+    """Extracts text content using BeautifulSoup."""
+    try:
+        div = WebDriverWait(driver, 15).until(
+            EC.presence_of_element_located((By.XPATH, "//div[@aria-labelledby='details']//div[@role='textbox']"))
+        )
+
+        html_content = div.get_attribute('innerHTML')
+        soup = BeautifulSoup(html_content, 'html.parser')
+        
+        for code_block in soup.find_all("milkdown-code-block"):
+            # Find all individual lines of code.
+            lines_of_code = code_block.find_all("div", class_="cm-line")
+            
+            # Rebuild the code by joining the text of each line.
+            reconstructed_code = "\n".join(line.get_text() for line in lines_of_code)
+            
+            # Replace the entire <milkdown-code-block> tag with our perfectly formatted text.
+            code_block.replace_with(
+                f"\n----new code block----\n{reconstructed_code}\n----end of code block ----\n"
+            )
+
+        # Remove any other general UI noise, like leftover buttons.
+        for element in soup.find_all('button'):
+            element.decompose()
+
+        return soup.get_text(separator='\n', strip=True)
+
+    except Exception as e:
+        return f"Error fetching the audit content: {e}" 
     
 def main():
     # Setup the driver and login
     driver = setup_driver()
     login(driver)
-    #pagination = 1
-    #urls = []
+    disregarded_urls = []
     #, "price oracle manipulation", "logic error", "lack of input validation", "reentrancy", "unchecked external calls", "flash loan", "integer overflow", "integer underflow", "insecure randomness", "denial of service (DoS)"
     categories = ["access control", "price oracle manipulation", "logic error", "lack of input validation", "reentrancy", 
                   "unchecked external calls", "flash loan", "integer overflow", "integer underflow", "insecure randomness", 
@@ -214,22 +243,30 @@ def main():
         if len(urls) == 0:
             logging.error("No search results found")
             return
-        urls_with_poc = []
         for url in urls:
             PoC_finding = find_PoC(driver, url)
             if PoC_finding:
                 extra_parameters = find_date_authors_bounty_impact(driver)
                 if extra_parameters:
-                    urls_with_poc.append(
-                        [date.today().isoformat(), url, PoC_finding] + [f"{k}: {v}" for k, v in extra_parameters.items()]
-                    )
-        results[category] = urls_with_poc
-        #urls_with_poc = []
-        #pagination = 0
+                    if url in results:
+                        results[url]['vulnerabilities'].append(category)
+                    else:
+                        results[url] = {'scrapping_date': date.today().isoformat(),
+                                        'poc_content_types': PoC_finding,
+                                        'vulnerabilities': [category],
+                                        **extra_parameters}
+                else:
+                    disregarded_urls.append(url)
+            else:
+                disregarded_urls.append(url)
 
     # Create a .json file with the links to the audits found
     with open("results.json", "w") as f:
         f.write(json.dumps(results, indent=4))
+    
+    # Create a .json file with the disregarded links
+    with open("disregarded_links.json", "w") as f:
+        f.write(json.dumps(disregarded_urls, indent=4))
 
 if __name__ == "__main__":
     main()
