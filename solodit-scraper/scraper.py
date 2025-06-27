@@ -68,7 +68,7 @@ def search_solodit(driver, search_term, page):
 
         # Find all the link elements
         link_elements = WebDriverWait(driver, 10).until(
-            EC.presence_of_all_elements_located((By.XPATH, "//div[contains(@class, 'loaded-findings')]//button[contains(@class, 'svelte-1cgeyv9')]//h3[contains(@class, 'line-clamp-2')]//a"))
+            EC.presence_of_all_elements_located((By.XPATH, "//div[contains(@class, 'loaded-findings')]//button[contains(@class, 'svelte-dpmcg0')]//h3[contains(@class, 'line-clamp-2')]//a"))
         )
         
         # Extract ALL 'href' attributes into a NEW list of STRINGS
@@ -105,6 +105,8 @@ def find_codeblock_or_text_or_link_after_poc(driver):
         tag = sibling.tag_name.lower()
         is_code_div = tag == "div" and "ql-code-block-container" in (sibling.get_attribute("class") or "")
         if tag in {"h1", "h2", "h3", "h4", "h5", "h6"}:
+            if not result:
+                result.append("empty")
             break  # Stop at next heading
         if is_code_div:
             logging.info(f"Found a codeblock in the PoC section")
