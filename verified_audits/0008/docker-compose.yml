@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  thorwallet-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Will use default test key from Dockerfile if not set
+        METAMASK_PRIVATE_KEY: ${METAMASK_PRIVATE_KEY:-}

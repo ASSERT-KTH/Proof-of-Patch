@@ -1,2 +1,14 @@
 solodit-scraper/.venv
 .env
+verified_audits/0010/.env
+verified_audits/0001/2025-01-iq-ai
+verified_audits/0002/2024-08-chakra
+verified_audits/0003/2024-08-winnables-raffles
+verified_audits/0004/2024-07-traitforge
+verified_audits/0005/pt-v5-vault
+verified_audits/0006/2025-01-initia-move
+verified_audits/0007/NextGen-Setup
+verified_audits/0008/2025-02-thorwallet
+verified_audits/0009/2025-02-thorwallet
+verified_audits/0010/2023-05-ajna
+verified_audits/0011/2023-06-lybra
