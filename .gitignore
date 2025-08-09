@@ -1,4 +1,5 @@
 solodit-scraper/.venv
+.DS_Store
 .env
 verified_audits/0010/.env
 verified_audits/0001/2025-01-iq-ai
