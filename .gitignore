@@ -2,6 +2,7 @@ solodit-scraper/.venv
 .DS_Store
 .env
 verified_audits/0010/.env
+verified_audits/0012/.env
 verified_audits/0001/2025-01-iq-ai
 verified_audits/0002/2024-08-chakra
 verified_audits/0003/2024-08-winnables-raffles
@@ -13,3 +14,8 @@ verified_audits/0008/2025-02-thorwallet
 verified_audits/0009/2025-02-thorwallet
 verified_audits/0010/2023-05-ajna
 verified_audits/0011/2023-06-lybra
+verified_audits/0012/2024-06-vultisig
+verified_audits/0013/2024-07-zaros
+verified_audits/0014/2024-06-size
+verified_audits/0015/2024-06-union-finance-update-2
+verified_audits/0016/telcoin-proof-of-concept
