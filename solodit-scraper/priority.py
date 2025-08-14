@@ -58,9 +58,12 @@ def parse_data(file):
         
         # --- Append new priority score ---
         details['priority_score'] = priority_score
+        details['verification'] = 'not_attempted'
+        details['correctness'] = 'not_evaluated'
     
     return json_data
 
+"""
 def main():
     prioritized_data = parse_data('my_result/enriched_data.json')
 
@@ -82,7 +85,37 @@ def main():
     df = df[cols]
     html_output = df.to_html(index=True)
     with open(output_file_path, "w") as file:
-        file.write(html_output)
+        file.write(html_output)"""
+
+def main():
+    prioritized_data = parse_data('enriched_data.json')
+
+    # Save the updated data to a JSON file (optional)
+    output_json = 'prioritized_data.json'
+    if prioritized_data:
+        with open(output_json, 'w', encoding='utf-8') as f:
+            json.dump(prioritized_data, f, indent=4)
+        logging.info(f"Successfully prioritized audits and saved the result to '{output_json}'")
+
+    # Convert to DataFrame
+    df = pd.DataFrame.from_dict(prioritized_data, orient='index')
+
+    # Sort by priority_score (highest first)
+    df.sort_values(by='priority_score', ascending=False, inplace=True)
+
+    # Create rank column
+    df['rank'] = range(1, len(df) + 1)
+    df['rank'] = df['rank'].astype(str).str.zfill(4)
+    df['rank'] = "'" + df['rank']
+
+    # Reorder columns so rank is first
+    cols = ['rank'] + [col for col in df.columns if col != 'rank']
+    df = df[cols]
+
+    # Save to CSV instead of HTML
+    output_csv_path = "prioritized_data.csv"
+    df.to_csv(output_csv_path, index=True)  
+    logging.info(f"CSV file saved to '{output_csv_path}'")
 
 if __name__ == "__main__":
     main()
