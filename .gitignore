@@ -3,6 +3,7 @@ solodit-scraper/.venv
 .env
 verified_audits/0010/.env
 verified_audits/0012/.env
+verified_audits/0027/.env
 verified_audits/0001/2025-01-iq-ai
 verified_audits/0002/2024-08-chakra
 verified_audits/0003/2024-08-winnables-raffles
@@ -26,3 +27,9 @@ verified_audits/0020/2022-12-gogopool
 verified_audits/0021/2024-02-ai-arena
 verified_audits/0023/2024-05-predy
 verified_audits/0024/2024-01-salty
+verified_audits/0025/2023-09-maia
+verified_audits/0026/2023-01-popcorn
+verified_audits/0027/2023-01-popcorn
+verified_audits/0028/2025-03-nudgexyz
+verified_audits/0029/cosmos-sdk
+verified_audits/0030/2025-01-liquid-ron
