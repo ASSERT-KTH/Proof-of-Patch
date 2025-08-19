@@ -4,6 +4,7 @@ solodit-scraper/.venv
 verified_audits/0010/.env
 verified_audits/0012/.env
 verified_audits/0027/.env
+verified_audits/0034/.env
 verified_audits/0001/2025-01-iq-ai
 verified_audits/0002/2024-08-chakra
 verified_audits/0003/2024-08-winnables-raffles
@@ -33,3 +34,8 @@ verified_audits/0027/2023-01-popcorn
 verified_audits/0028/2025-03-nudgexyz
 verified_audits/0029/cosmos-sdk
 verified_audits/0030/2025-01-liquid-ron
+verified_audits/0031/2025-01-iq-ai
+verified_audits/0032/2023-05-maia
+verified_audits/0033/2023-10-nextgen
+verified_audits/0034/2025-02-yieldoor
+verified_audits/0035/2023-01-rabbithole

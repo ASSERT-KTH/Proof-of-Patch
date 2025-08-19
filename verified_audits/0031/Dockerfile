@@ -38,11 +38,8 @@ USER foundry
 
 WORKDIR /app/repo
 
-# Copy the PoC test into the test environment of the repository
-COPY PoC.sol /app/repo/test/TokenGovernorTest.sol
-
 # Install dependencies and Run the PoC
 RUN pnpm i
-RUN forge test -vvv --mt test_AttackLowQuorumThreshold
+RUN forge test --match-test test_MoveLiquidity_TokenInjection -vvv
 
 # verification = yes /w modification | correctness = no oracle
