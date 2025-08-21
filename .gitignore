@@ -5,6 +5,7 @@ verified_audits/0010/.env
 verified_audits/0012/.env
 verified_audits/0027/.env
 verified_audits/0034/.env
+verified_audits/0045/.env
 verified_audits/0001/2025-01-iq-ai
 verified_audits/0002/2024-08-chakra
 verified_audits/0003/2024-08-winnables-raffles
@@ -44,3 +45,8 @@ verified_audits/0037/2023-04-caviar
 verified_audits/0038/2024-12-bakerfi
 verified_audits/0039/2023-01-rabbithole
 verified_audits/0040/2023-01-rabbithole
+verified_audits/0041/2023-11-kelp
+verified_audits/0042/2024-11-mantra-dex
+verified_audits/0043/2022-11-non-fungible
+verified_audits/0044/2022-05-rubicon
+verified_audits/0045/2024-04-panoptic

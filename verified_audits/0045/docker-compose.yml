@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  ajna-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # This automatically reads ETHEREUM_MAINNET from .env (symlink to ../../.env)
+        ETHEREUM_MAINNET: ${ETHEREUM_MAINNET}
