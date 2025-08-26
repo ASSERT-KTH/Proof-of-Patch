@@ -6,6 +6,7 @@ verified_audits/0012/.env
 verified_audits/0027/.env
 verified_audits/0034/.env
 verified_audits/0045/.env
+verified_audits/0062/.env
 verified_audits/0001/2025-01-iq-ai
 verified_audits/0002/2024-08-chakra
 verified_audits/0003/2024-08-winnables-raffles
@@ -65,3 +66,8 @@ verified_audits/0057/2022-07-fractional
 verified_audits/0058/2024-08-superposition
 verified_audits/0059/2024-11-ethos-network-ii
 verified_audits/0060/2023-07-pooltogether
+verified_audits/0061/2023-07-pooltogether
+verified_audits/0062/2023-05-party
+verified_audits/0063/angle-transmuter
+verified_audits/0064/2023-11-convergence
+verified_audits/0065/2023-10-PasswordStore
