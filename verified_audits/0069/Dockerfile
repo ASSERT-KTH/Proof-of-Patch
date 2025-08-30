@@ -17,11 +17,8 @@ RUN chown -R foundry:foundry /app
 # Switch to foundry user for running commands
 USER foundry
 
-# Install specific foundry version as required by the documentation
-#RUN foundryup -v nightly-87bc53fc6c874bd4c92d97ed180b949e3a36d78c
-
 # Navigate to the ajna-core directory where the tests are
-WORKDIR /app/repo/ajna-core
+WORKDIR /app/repo/ajna-grants
 
 # Accept Ethereum RPC URL as build argument from docker-compose
 ARG ETHEREUM_MAINNET
@@ -31,5 +28,4 @@ ENV ETH_RPC_URL=${ETHEREUM_MAINNET}
 RUN forge build
 
 # Run the specific test that demonstrates the vulnerability
-# The test shows that rewardsEarned in ClaimReward event is not necessarily what's transferred
-RUN forge test --match-test testClaimRewardsFreezeUnclaimedYield -vvv
+RUN forge test --match-test testPoCTreasuryPrecisionLoss -vvv

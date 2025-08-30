@@ -7,6 +7,7 @@ verified_audits/0027/.env
 verified_audits/0034/.env
 verified_audits/0045/.env
 verified_audits/0062/.env
+verified_audits/0069/.env
 verified_audits/0001/2025-01-iq-ai
 verified_audits/0002/2024-08-chakra
 verified_audits/0003/2024-08-winnables-raffles
@@ -71,3 +72,8 @@ verified_audits/0062/2023-05-party
 verified_audits/0063/angle-transmuter
 verified_audits/0064/2023-11-convergence
 verified_audits/0065/2023-10-PasswordStore
+verified_audits/0066/2024-12-bakerfi
+verified_audits/0067/2023-04-rubicon
+verified_audits/0068/2023-05-maia
+verified_audits/0069/2023-05-ajna
+verified_audits/0070/2023-10-PasswordStore
