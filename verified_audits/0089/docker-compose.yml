@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  numa-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # This automatically reads ARBITRUM_MAINNET from .env
+        ARBITRUM_MAINNET: ${ARBITRUM_MAINNET}
