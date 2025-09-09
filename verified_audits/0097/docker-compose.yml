@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  fractional-poc:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Pass required hardhat config variables from .env
+        DEPLOYER_PRIVATE_KEY: ${METAMASK_PRIVATE_KEY}
+        ALCHEMY_API_KEY: ${ALCHEMY_API_KEY}

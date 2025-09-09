@@ -13,5 +13,3 @@ WORKDIR /app/repo
 
 # Run the test
 RUN forge test --mt test_wronModifierIImplementation -vvv 
-
-# verification = yes | Correctness = no oracle

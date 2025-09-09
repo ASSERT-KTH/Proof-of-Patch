@@ -63,30 +63,6 @@ def parse_data(file):
     
     return json_data
 
-"""
-def main():
-    prioritized_data = parse_data('my_result/enriched_data.json')
-
-    # Save the updated data to a new file
-    output_file = 'prioritized_data.json'
-    if prioritized_data:
-        with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(prioritized_data, f, indent=4)
-        logging.info(f"Successfully prioritized audits and saved the result to '{output_file}'")
-    
-
-    data = prioritized_data
-    df = pd.DataFrame.from_dict(data, orient='index')
-    df.sort_values(by='priority_score', ascending=False, inplace=True)
-    output_file_path = "data.html"
-    df['rank'] = range(1, len(df) + 1)
-    df['rank'] = df['rank'].astype(str).str.zfill(4)
-    cols = ['rank'] + [col for col in df.columns if col != 'rank']
-    df = df[cols]
-    html_output = df.to_html(index=True)
-    with open(output_file_path, "w") as file:
-        file.write(html_output)"""
-
 def main():
     prioritized_data = parse_data('enriched_data.json')
 
