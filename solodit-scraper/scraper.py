@@ -28,26 +28,30 @@ logging.basicConfig(
 def load_existing_results():
     """Load existing results from file if it exists"""
     try:
-        with open("results.json", "r", encoding="utf-8") as f:
+        with open("results/results.json", "r", encoding="utf-8") as f:
             results = json.load(f)
-            logging.info(f"Loaded {len(results)} existing results from results.json")
+            logging.info(f"Loaded {len(results)} existing results from results/results.json")
             return results
     except FileNotFoundError:
         logging.info("No existing results file found, starting fresh")
         return {}
     except json.JSONDecodeError:
-        logging.warning("Existing results.json is corrupted, starting fresh")
+        logging.warning("Existing results/results.json is corrupted, starting fresh")
         return {}
 
 def save_results_incrementally(results, disregarded_urls, category=None):
     """Save results incrementally to avoid data loss"""
     try:
+        # Ensure results directory exists
+        import os
+        os.makedirs("results", exist_ok=True)
+        
         # Save main results
-        with open("results.json", "w", encoding="utf-8") as f:
+        with open("results/results.json", "w", encoding="utf-8") as f:
             json.dump(results, f, indent=4)
         
         # Save disregarded URLs
-        with open("disregarded_links.json", "w", encoding="utf-8") as f:
+        with open("results/disregarded_links.json", "w", encoding="utf-8") as f:
             json.dump(disregarded_urls, f, indent=4)
         
         if category:
@@ -69,7 +73,9 @@ def save_progress(category, urls_found, urls_processed, urls_added, urls_disrega
     }
     
     try:
-        with open("progress.json", "w", encoding="utf-8") as f:
+        import os
+        os.makedirs("results", exist_ok=True)
+        with open("results/progress.json", "w", encoding="utf-8") as f:
             json.dump(progress_data, f, indent=4)
         logging.info(f"Progress saved: {category} - Found: {urls_found}, Processed: {urls_processed}, Added: {urls_added}, Disregarded: {urls_disregarded}")
     except Exception as e:
@@ -438,7 +444,7 @@ def main():
     
     # Load existing disregarded URLs if they exist
     try:
-        with open("disregarded_links.json", "r", encoding="utf-8") as f:
+        with open("results/disregarded_links.json", "r", encoding="utf-8") as f:
             disregarded_urls = json.load(f)
             logging.info(f"Loaded {len(disregarded_urls)} existing disregarded URLs")
     except FileNotFoundError:

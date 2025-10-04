@@ -280,10 +280,12 @@ def calculate_patch_score(details):
     return score
 
 def main():
-    enriched_data = parse_results('results.json')
+    enriched_data = parse_results('results/results.json')
 
     # Save the updated data to a new file
-    output_file = 'enriched_data.json'
+    import os
+    os.makedirs("results", exist_ok=True)
+    output_file = 'results/enriched_data.json'
     if enriched_data:
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(enriched_data, f, indent=4)
@@ -316,9 +318,9 @@ def main():
             "avg_tokens_per_audit": total_tokens_used/len(enriched_data)
         }
         
-        with open("cost_summary.json", "w") as f:
+        with open("results/cost_summary.json", "w") as f:
             json.dump(cost_summary, f, indent=4)
-        logging.info("Cost summary saved to 'cost_summary.json'")
+        logging.info("Cost summary saved to 'results/cost_summary.json'")
 
 if __name__ == "__main__":
     main()

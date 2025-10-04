@@ -23,7 +23,23 @@ def parse_data(file):
         # Get basic information
         poc_content_types = details.get('poc_content_types', [])
         impact = details.get('impact', 'Low')
-        year = int(details.get('publication_date', '2024').split()[-1])
+        
+        # Handle publication date parsing (could be "2 days ago", "Jan 2023", etc.)
+        publication_date = details.get('publication_date', 'no_date')
+        try:
+            # Try to ex
+            # tract year from date string
+            if 'ago' in publication_date.lower():
+                # For relative dates like "2 days ago", mark as no_date
+                year = 0  # Use 0 to indicate no specific date
+            else:
+                # Try to extract year from date string
+                year_str = publication_date.split()[-1]
+                year = int(year_str)
+        except (ValueError, IndexError):
+            # Fallback to 0 if parsing fails
+            year = 0
+        
         n_authors = details.get('n_authors', 1)
         contains_github_link = details.get('contains_github_link', 'no')
         
@@ -121,7 +137,8 @@ def parse_data(file):
             priority_score += 6
         
         # Recency bonus (more recent audits might be more relevant)
-        priority_score += max(0, (year - 2020) * 0.5)
+        if year > 0:  # Only apply recency bonus if we have a valid year
+            priority_score += max(0, (year - 2020) * 0.5)
         
         # --- Append new priority score ---
         details['priority_score'] = priority_score
@@ -141,10 +158,12 @@ def parse_data(file):
     return json_data
 
 def main():
-    prioritized_data = parse_data('enriched_data.json')
+    prioritized_data = parse_data('results/enriched_data.json')
 
     # Save the updated data to a JSON file (optional)
-    output_json = 'prioritized_data.json'
+    import os
+    os.makedirs("results", exist_ok=True)
+    output_json = 'results/prioritized_data.json'
     if prioritized_data:
         with open(output_json, 'w', encoding='utf-8') as f:
             json.dump(prioritized_data, f, indent=4)
@@ -168,7 +187,7 @@ def main():
     df = df[cols]
 
     # Save to CSV
-    output_csv_path = "prioritized_data.csv"
+    output_csv_path = "results/prioritized_data.csv"
     df.to_csv(output_csv_path, index=True)  
     logging.info(f"CSV file saved to '{output_csv_path}'")
     
