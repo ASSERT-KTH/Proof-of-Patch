@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 from datetime import date
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -14,8 +15,65 @@ from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup
 
-# Setting up basic configuration for logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Setting up logging configuration with file output
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('scraper.log'),
+        logging.StreamHandler()  # Also print to console
+    ]
+)
+
+def load_existing_results():
+    """Load existing results from file if it exists"""
+    try:
+        with open("results.json", "r", encoding="utf-8") as f:
+            results = json.load(f)
+            logging.info(f"Loaded {len(results)} existing results from results.json")
+            return results
+    except FileNotFoundError:
+        logging.info("No existing results file found, starting fresh")
+        return {}
+    except json.JSONDecodeError:
+        logging.warning("Existing results.json is corrupted, starting fresh")
+        return {}
+
+def save_results_incrementally(results, disregarded_urls, category=None):
+    """Save results incrementally to avoid data loss"""
+    try:
+        # Save main results
+        with open("results.json", "w", encoding="utf-8") as f:
+            json.dump(results, f, indent=4)
+        
+        # Save disregarded URLs
+        with open("disregarded_links.json", "w", encoding="utf-8") as f:
+            json.dump(disregarded_urls, f, indent=4)
+        
+        if category:
+            logging.info(f"✓ Completed category '{category}': {len(results)} total results, {len(disregarded_urls)} disregarded URLs")
+        else:
+            logging.info(f"Saved {len(results)} results and {len(disregarded_urls)} disregarded URLs")
+    except Exception as e:
+        logging.error(f"Error saving results: {e}")
+
+def save_progress(category, urls_found, urls_processed, urls_added, urls_disregarded):
+    """Save progress information for debugging"""
+    progress_data = {
+        'category': category,
+        'urls_found': urls_found,
+        'urls_processed': urls_processed,
+        'urls_added': urls_added,
+        'urls_disregarded': urls_disregarded,
+        'timestamp': date.today().isoformat()
+    }
+    
+    try:
+        with open("progress.json", "w", encoding="utf-8") as f:
+            json.dump(progress_data, f, indent=4)
+        logging.info(f"Progress saved: {category} - Found: {urls_found}, Processed: {urls_processed}, Added: {urls_added}, Disregarded: {urls_disregarded}")
+    except Exception as e:
+        logging.error(f"Error saving progress: {e}")
 
 def construct_url(impact, pagination=1, search_term=""):
     # Define the base URL
@@ -26,7 +84,7 @@ def construct_url(impact, pagination=1, search_term=""):
     params = {
         "i": ",".join(impact),  # Join the impacts into a comma-separated string
         "p": pagination,        # Pagination value
-        "s": search_term,        # Search term
+        "s": search_term,       # Keep original search term (category only)
         "rf": "after"
     }
 
@@ -148,6 +206,122 @@ def find_PoC(driver, url):
         logging.error(f"An unknown error occurred: {e}")
         return False
 
+def find_mitigation_section(driver):
+    """Look for mitigation/patch sections in the audit"""
+    mitigation_keywords = [
+        "mitigation", "fix", "patch", "solution", "remediation", "corrective", 
+        "recommendation", "suggestion", "improvement", "resolution"
+    ]
+    
+    mitigation_content = []
+    
+    for keyword in mitigation_keywords:
+        try:
+            # Look for headings containing mitigation keywords
+            headings = driver.find_elements(
+                By.XPATH, f"//*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6][contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '{keyword}')]"
+            )
+            
+            for heading in headings:
+                # Get content after this heading until next heading
+                siblings = driver.find_elements(
+                    By.XPATH, f"//*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6][contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '{keyword}')]/following-sibling::*"
+                )
+                
+                content_types = []
+                for sibling in siblings:
+                    tag = sibling.tag_name.lower()
+                    
+                    # Check if we hit another heading
+                    if tag in {"h1", "h2", "h3", "h4", "h5", "h6"}:
+                        break
+                    
+                    # Check for code blocks
+                    if tag == "div" and "ql-code-block-container" in (sibling.get_attribute("class") or ""):
+                        content_types.append("code")
+                    
+                    # Check for links (especially GitHub)
+                    links = sibling.find_elements(By.TAG_NAME, 'a')
+                    for link in links:
+                        href = link.get_attribute('href')
+                        if href and ('github.com' in href or 'commit' in href or 'pull' in href or 'pr' in href):
+                            content_types.append("github_link")
+                        elif href:
+                            content_types.append("link")
+                    
+                    # Check for text content
+                    if tag in {"p", "ul", "ol"} and sibling.text.strip():
+                        content_types.append("text")
+                
+                if content_types:
+                    mitigation_content.extend(content_types)
+                    logging.info(f"Found mitigation section with: {content_types}")
+        
+        except Exception as e:
+            logging.debug(f"Error searching for {keyword}: {e}")
+    
+    return list(set(mitigation_content)) if mitigation_content else False
+
+def find_patch_references(driver):
+    """Look for specific patch references like GitHub commits, PRs, etc."""
+    try:
+        # Get all text content
+        webpage_text = get_audit_content(driver)
+        
+        patch_indicators = {
+            'github_commit': False,
+            'github_pr': False,
+            'patch_link': False,
+            'fix_commit': False,
+            'mitigation_code': False
+        }
+        
+        # Look for GitHub commit patterns
+        commit_patterns = [
+            r'github\.com/[^/]+/[^/]+/commit/[a-f0-9]+',
+            r'commit/[a-f0-9]{40}',
+            r'commit/[a-f0-9]{7,}',
+            r'fixes?\s+#\d+',
+            r'closes?\s+#\d+'
+        ]
+        
+        for pattern in commit_patterns:
+            if re.search(pattern, webpage_text, re.IGNORECASE):
+                patch_indicators['github_commit'] = True
+                break
+        
+        # Look for GitHub PR patterns
+        pr_patterns = [
+            r'github\.com/[^/]+/[^/]+/pull/\d+',
+            r'pull/\d+',
+            r'pr\s*#\d+',
+            r'pull\s*request\s*#\d+'
+        ]
+        
+        for pattern in pr_patterns:
+            if re.search(pattern, webpage_text, re.IGNORECASE):
+                patch_indicators['github_pr'] = True
+                break
+        
+        # Look for general patch/fix links
+        if re.search(r'(patch|fix|mitigation).*\.(com|org|io)', webpage_text, re.IGNORECASE):
+            patch_indicators['patch_link'] = True
+        
+        # Look for fix commit messages
+        if re.search(r'(fix|patch|mitigate|resolve).*commit', webpage_text, re.IGNORECASE):
+            patch_indicators['fix_commit'] = True
+        
+        # Check if there's mitigation code in the content
+        mitigation_section = find_mitigation_section(driver)
+        if mitigation_section and 'code' in mitigation_section:
+            patch_indicators['mitigation_code'] = True
+        
+        return patch_indicators
+        
+    except Exception as e:
+        logging.error(f"Error finding patch references: {e}")
+        return patch_indicators
+
 def find_detailed_information(driver):
     logging.info("Starting to look for detailed information")
     results = {}
@@ -205,6 +379,14 @@ def find_detailed_information(driver):
             results['contains_github_link'] = 'no'
         results['audit_content'] = webpage_text 
 
+        # Find patch references
+        patch_refs = find_patch_references(driver)
+        results.update(patch_refs)
+        
+        # Check for mitigation section
+        mitigation_content = find_mitigation_section(driver)
+        results['mitigation_content_types'] = mitigation_content if mitigation_content else []
+
         try:
             ai_summary = driver.find_element(By.XPATH, "//div[@data-value='summary']")
             results['ai_summary'] = ai_summary.text
@@ -249,53 +431,139 @@ def main():
     # Setup the driver and login
     driver = setup_driver()
     login(driver)
+    
+    # Load existing results to resume if interrupted
+    results = load_existing_results()
     disregarded_urls = []
-    #, "price oracle manipulation", "logic error", "lack of input validation", "reentrancy", "unchecked external calls", "flash loan", "integer overflow", "integer underflow", "insecure randomness", "denial of service (DoS)"
+    
+    # Load existing disregarded URLs if they exist
+    try:
+        with open("disregarded_links.json", "r", encoding="utf-8") as f:
+            disregarded_urls = json.load(f)
+            logging.info(f"Loaded {len(disregarded_urls)} existing disregarded URLs")
+    except FileNotFoundError:
+        logging.info("No existing disregarded URLs file found")
+    
     categories = ["access control", "price oracle manipulation", "logic error", "lack of input validation", "reentrancy", 
                   "unchecked external calls", "flash loan", "integer overflow", "integer underflow", "insecure randomness", 
                   "denial of service (DoS)"]
-    results = {}
+    
+    total_categories = len(categories)
+    logging.info(f"Starting scraping process for {total_categories} categories")
 
     # For every OWASP top 10 category, find audits with PoC segments with included code-blocks
-    for category in categories:
+    for category_index, category in enumerate(categories, 1):
+        logging.info(f"\n{'='*60}")
+        logging.info(f"CATEGORY {category_index}/{total_categories}: {category.upper()}")
+        logging.info(f"{'='*60}")
+        
         urls = []
         pagination = 1
-        logging.info(f"Looking at the category: {category}")
+        urls_found = 0
+        urls_processed = 0
+        urls_added = 0
+        urls_disregarded = 0
+        
+        # Search through all pages for this category
         while True:
+            logging.info(f"Searching page {pagination} for '{category}'...")
             search_results = search_solodit(driver, category, pagination)
             if not search_results:
+                logging.info(f"No more results found for '{category}' on page {pagination}")
                 break
             urls.extend(search_results)
-            #if pagination == 1: # FOR DEMO
-                #break # FOR DEMO
+            urls_found += len(search_results)
+            logging.info(f"Found {len(search_results)} URLs on page {pagination}")
             pagination += 1
+            
+            # Save progress after each page
+            save_progress(category, urls_found, urls_processed, urls_added, urls_disregarded)
+        
         if len(urls) == 0:
-            logging.error("No search results found")
-            return
-        for url in urls:
-            PoC_finding = find_PoC(driver, url)
-            if PoC_finding:
+            logging.warning(f"No search results found for category: {category}")
+            continue
+        
+        logging.info(f"Total URLs found for '{category}': {len(urls)}")
+        
+        # Process each URL for this category
+        for url_index, url in enumerate(urls, 1):
+            logging.info(f"\n--- Processing URL {url_index}/{len(urls)} for '{category}' ---")
+            logging.info(f"URL: {url}")
+            
+            try:
+                PoC_finding = find_PoC(driver, url)
                 extra_parameters = find_detailed_information(driver)
+                urls_processed += 1
+                
                 if extra_parameters:
-                    if url in results:
-                        results[url]['vulnerabilities'].append(category)
+                    # Include PoC information in the results
+                    extra_parameters['poc_content_types'] = PoC_finding if PoC_finding else []
+                    
+                    # Check if audit has patches/mitigations OR PoC (both are valuable)
+                    has_patch = any([
+                        extra_parameters.get('github_commit', False),
+                        extra_parameters.get('github_pr', False),
+                        extra_parameters.get('patch_link', False),
+                        extra_parameters.get('fix_commit', False),
+                        extra_parameters.get('mitigation_code', False),
+                        extra_parameters.get('mitigation_content_types', [])
+                    ])
+                    
+                    has_poc = PoC_finding is not False and len(PoC_finding) > 0
+                    
+                    # Include if it has patches OR PoC (both are valuable)
+                    if has_patch or has_poc:
+                        if url in results:
+                            results[url]['vulnerabilities'].append(category)
+                        else:
+                            results[url] = {
+                                'scrapping_date': date.today().isoformat(),
+                                'vulnerabilities': [category],
+                                **extra_parameters
+                            }
+                        urls_added += 1
+                        
+                        if has_patch and has_poc:
+                            logging.info(f"✓ Added audit with BOTH patch indicators AND PoC")
+                        elif has_patch:
+                            logging.info(f"✓ Added audit with patch indicators")
+                        else:
+                            logging.info(f"✓ Added audit with PoC (no patch indicators)")
                     else:
-                        results[url] = {'scrapping_date': date.today().isoformat(),
-                                        'poc_content_types': PoC_finding,
-                                        'vulnerabilities': [category],
-                                        **extra_parameters}
+                        disregarded_urls.append(url)
+                        urls_disregarded += 1
+                        logging.info(f"✗ Disregarded audit (no patch indicators or PoC)")
                 else:
                     disregarded_urls.append(url)
-            else:
+                    urls_disregarded += 1
+                    logging.warning(f"✗ Failed to extract information from URL")
+                
+                # Save progress after each URL
+                save_progress(category, urls_found, urls_processed, urls_added, urls_disregarded)
+                
+            except Exception as e:
+                logging.error(f"Error processing URL {url}: {e}")
                 disregarded_urls.append(url)
+                urls_disregarded += 1
+                continue
+        
+        # Save results after each category is completed
+        save_results_incrementally(results, disregarded_urls, category)
+        
+        logging.info(f"\n✓ COMPLETED CATEGORY '{category.upper()}'")
+        logging.info(f"  URLs found: {urls_found}")
+        logging.info(f"  URLs processed: {urls_processed}")
+        logging.info(f"  URLs added: {urls_added}")
+        logging.info(f"  URLs disregarded: {urls_disregarded}")
+        logging.info(f"  Total results so far: {len(results)}")
 
-    # Create a .json file with the links to the audits found
-    with open("results.json", "w") as f:
-        f.write(json.dumps(results, indent=4))
-    
-    # Create a .json file with the disregarded links
-    with open("disregarded_links.json", "w") as f:
-        f.write(json.dumps(disregarded_urls, indent=4))
+    # Final save
+    save_results_incrementally(results, disregarded_urls)
+    logging.info(f"\n{'='*60}")
+    logging.info(f"SCRAPING COMPLETED!")
+    logging.info(f"Total audits found: {len(results)}")
+    logging.info(f"Total URLs disregarded: {len(disregarded_urls)}")
+    logging.info(f"{'='*60}")
 
 if __name__ == "__main__":
     main()
