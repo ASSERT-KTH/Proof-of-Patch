@@ -1,0 +1,13 @@
+{
+    "model": "gpt-4o",
+    "pricing": {
+        "input_cost_per_1k": 0.005,
+        "output_cost_per_1k": 0.015
+    },
+    "total_audits": 3814,
+    "total_requests": 3814,
+    "total_tokens": 5433621,
+    "total_cost": 28.42967500000004,
+    "avg_cost_per_audit": 0.007454031200839024,
+    "avg_tokens_per_audit": 1424.6515469323544
+}
