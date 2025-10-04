@@ -1,5 +1,0 @@
-Reccomended mitgation:
-
-A complete mitgation is provided at: https://github.com/code-423n4/2022-11-ens-findings/issues/14
-
-In short, they try to guarantee only fuses of **wrapped** nodes can be burnt.

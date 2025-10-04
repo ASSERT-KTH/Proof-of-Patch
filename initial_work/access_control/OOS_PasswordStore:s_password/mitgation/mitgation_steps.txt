@@ -1,5 +1,0 @@
-General recommendation: 
-
-All data on the blockchain is public. To store sensitive information, additional encryption or off-chain solutions 
-should be considered. Sensitive and personal data should never be stored on the blockchain in plaintext or weakly encrypted 
-or encoded format.

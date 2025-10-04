@@ -1,4 +1,0 @@
-testPocAccrueFluxMultipleTimes first creates a veALCX position and casts a vote. The crucial part is the subsequent 
-repeated calls to the voter.poke(tokenId) function within the same epoch. 
-The test checks if the unclaimed flux balance for the veALCX token increases after each subsequent poke call within the 
-same epoch, proving that a user can accrue flux repeatedly and thus exploit the vulnerability for potential gain.
