@@ -6,7 +6,7 @@
 
 This repository contains a specialized dataset of smart contract security audits that have been identified as containing **patch indicators** or **mitigation strategies**. Unlike general audit datasets, this collection focuses specifically on audits that provide actionable fixes, GitHub commits, pull requests, or other forms of remediation.
 
-The dataset is built using enhanced scraping and AI analysis tools adapted from the [VeriSet](https://github.com/your-veriset-repo) project, specifically modified to prioritize audits with patch/mitigation content.
+The dataset is built using enhanced scraping and AI analysis tools adapted from the [VeriSet](https://github.com/ASSERT-KTH/VeriSet) project, specifically modified to prioritize audits with patch/mitigation content.
 
 ## 📊 Dataset Statistics
 
@@ -33,6 +33,9 @@ The dataset is built using enhanced scraping and AI analysis tools adapted from 
 **Total**: 5,480 audits found → 3,814 audits added (69.6% overall success rate)
 
 *Data collected on October 3-4, 2025*
+
+STARTING TIMESTAMP: 2025-10-03 15:30:55,954
+FINISHED AT:        2025-10-04 07:38:23,078
 
 ## 🔍 What Makes This Dataset Special
 
@@ -213,13 +216,9 @@ Proof-of-Patch Dataset: Smart Contract Audits with Mitigation Indicators
 [Year]
 ```
 
-## 🤝 Contributing
 
-Contributions to improve the dataset quality, add new vulnerability types, or enhance the analysis pipeline are welcome. Please open an issue or submit a pull request.
 
-## 📞 Contact
 
-For questions about the dataset or collaboration opportunities, please contact [your-email@domain.com].
 
 ---
 
