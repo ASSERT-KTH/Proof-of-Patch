@@ -20,46 +20,123 @@ def parse_data(file):
     for audit, details in json_data.items():
         priority_score = 0
 
-        poc_content_types = details['poc_content_types']
-        impact = details['impact']
-        year = int(details['publication_date'].split()[-1])
-        n_authors = details['n_authors']
-        contains_github_link = details['contains_github_link']
-        has_poc_code = details['has_poc_code']
-        is_well_reasoned = details['is_well_reasoned']
-        is_correct = details['is_correct']
+        # Get basic information
+        poc_content_types = details.get('poc_content_types', [])
+        impact = details.get('impact', 'Low')
+        year = int(details.get('publication_date', '2024').split()[-1])
+        n_authors = details.get('n_authors', 1)
+        contains_github_link = details.get('contains_github_link', 'no')
+        
+        # Get patch-focused analysis results
+        has_poc = details.get('has_poc', 'no')
+        has_mitigation_proposal = details.get('has_mitigation_proposal', 'no')
+        has_patch_reference = details.get('has_patch_reference', 'no')
+        audit_quality = details.get('audit_quality', 'poor')
+        
+        # Get technical indicators
+        github_commit = details.get('github_commit', False)
+        github_pr = details.get('github_pr', False)
+        patch_link = details.get('patch_link', False)
+        fix_commit = details.get('fix_commit', False)
+        mitigation_code = details.get('mitigation_code', False)
+        mitigation_content_types = details.get('mitigation_content_types', [])
 
-        #text = f"impact: {impact}"
-        #logging.info(text)
-        # --- Large impact parameters ---
-        if has_poc_code == 'yes':
-            priority_score = priority_score + 5
-        if is_well_reasoned == 'yes':
-            priority_score = priority_score + 5
-        elif is_well_reasoned == 'mostly':
-            priority_score = priority_score + 2
-        if is_correct == 'yes':
-            priority_score = priority_score + 5
-        if contains_github_link == 'yes':
-            priority_score = priority_score + 5
-
-        # --- Smaller impact parameters ---
-        priority_score = priority_score + len(poc_content_types) + 0.5 * (year - 2025)
+        # --- HIGH PRIORITY: Patch-related scoring ---
+        # Patch references get the highest priority
+        if has_patch_reference == 'yes':
+            priority_score += 20  # Highest weight for actual patch references
+        elif has_patch_reference == 'uncertain':
+            priority_score += 8
+        elif has_patch_reference == 'no':
+            priority_score += 0
+        
+        # Mitigation proposals are also very important
+        if has_mitigation_proposal == 'yes':
+            priority_score += 15
+        elif has_mitigation_proposal == 'no':
+            priority_score += 0
+        
+        # PoC is important for understanding the vulnerability
+        if has_poc == 'yes':
+            priority_score += 12
+        elif has_poc == 'no':
+            priority_score += 0
+        
+        # Audit quality scoring
+        quality_scores = {
+            'excellent': 15,
+            'good': 10,
+            'fair': 6,
+            'poor': 2
+        }
+        priority_score += quality_scores.get(audit_quality, 0)
+        
+        # --- TECHNICAL INDICATORS ---
+        if github_commit:
+            priority_score += 12
+        if github_pr:
+            priority_score += 12
+        if patch_link:
+            priority_score += 8
+        if fix_commit:
+            priority_score += 10
+        if mitigation_code:
+            priority_score += 10
+        
+        # Mitigation content types bonus
+        if 'code' in mitigation_content_types:
+            priority_score += 8
+        if 'github_link' in mitigation_content_types:
+            priority_score += 10
+        if 'text' in mitigation_content_types:
+            priority_score += 3
+        
+        # --- MEDIUM PRIORITY: PoC content scoring ---
+        if 'code' in poc_content_types:
+            priority_score += 6
+        if 'link' in poc_content_types:
+            priority_score += 4
+        if 'text' in poc_content_types:
+            priority_score += 3
+        
+        # --- LOWER PRIORITY: General factors ---
+        # Impact level bonus
         if impact == 'High':
-            priority_score = priority_score + 2
+            priority_score += 8
         elif impact == 'Medium':
-            priority_score = priority_score + 1
+            priority_score += 5
+        elif impact == 'Low':
+            priority_score += 2
+        
+        # GitHub link presence bonus
+        if contains_github_link == 'yes':
+            priority_score += 4
+        
+        # Author count bonus (collaborative work often higher quality)
         if 1 < n_authors < 5:
-            priority_score = priority_score + 1
+            priority_score += 2
         elif 5 <= n_authors < 10:
-            priority_score = priority_score + 2
-        elif 9 < n_authors:
-            priority_score = priority_score + 3
+            priority_score += 4
+        elif n_authors >= 10:
+            priority_score += 6
+        
+        # Recency bonus (more recent audits might be more relevant)
+        priority_score += max(0, (year - 2020) * 0.5)
         
         # --- Append new priority score ---
         details['priority_score'] = priority_score
         details['verification'] = 'not_attempted'
         details['correctness'] = 'not_evaluated'
+        
+        # Add categorization for easy filtering
+        if has_patch_reference == 'yes' and has_poc == 'yes':
+            details['category'] = 'patch_and_poc'
+        elif has_patch_reference == 'yes':
+            details['category'] = 'patch_only'
+        elif has_poc == 'yes':
+            details['category'] = 'poc_only'
+        else:
+            details['category'] = 'other'
     
     return json_data
 
@@ -84,14 +161,36 @@ def main():
     df['rank'] = df['rank'].astype(str).str.zfill(4)
     df['rank'] = "'" + df['rank']
 
-    # Reorder columns so rank is first
-    cols = ['rank'] + [col for col in df.columns if col != 'rank']
+    # Reorder columns so rank is first, then key metrics
+    key_columns = ['rank', 'priority_score', 'category', 'has_patch_reference', 'has_mitigation_proposal', 'has_poc', 'audit_quality', 'impact']
+    other_columns = [col for col in df.columns if col not in key_columns]
+    cols = key_columns + other_columns
     df = df[cols]
 
-    # Save to CSV instead of HTML
+    # Save to CSV
     output_csv_path = "prioritized_data.csv"
     df.to_csv(output_csv_path, index=True)  
     logging.info(f"CSV file saved to '{output_csv_path}'")
+    
+    # Print summary statistics
+    print("\n" + "="*60)
+    print("PATCH PRIORITIZATION SUMMARY")
+    print("="*60)
+    print(f"Total audits prioritized: {len(df)}")
+    print(f"Average priority score: {df['priority_score'].mean():.1f}")
+    print(f"Highest priority score: {df['priority_score'].max()}")
+    print(f"Lowest priority score: {df['priority_score'].min()}")
+    
+    print("\n--- CATEGORY BREAKDOWN ---")
+    category_counts = df['category'].value_counts()
+    for category, count in category_counts.items():
+        percentage = (count / len(df)) * 100
+        print(f"{category}: {count} ({percentage:.1f}%)")
+    
+    print("\n--- TOP 10 HIGHEST PRIORITY AUDITS ---")
+    top_10 = df.head(10)[['rank', 'priority_score', 'category', 'has_patch_reference', 'has_mitigation_proposal', 'has_poc', 'audit_quality', 'impact']]
+    print(top_10.to_string(index=False))
+    print("="*60)
 
 if __name__ == "__main__":
     main()
