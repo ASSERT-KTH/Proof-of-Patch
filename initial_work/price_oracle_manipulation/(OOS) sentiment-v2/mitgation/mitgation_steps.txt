@@ -1,4 +1,0 @@
-Reccomendation:
-
-Allow at least the `THREE_MINUTES` period to expire since the last update before accepting a new update; 
-if an attempt is made during this period, then terminate execution silently without a `revert`.

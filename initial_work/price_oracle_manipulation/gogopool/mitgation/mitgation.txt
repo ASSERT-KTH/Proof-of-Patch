@@ -1,1 +1,0 @@
-If the amount to be slashed is greater than what the node operator has staked, slash all their stake.

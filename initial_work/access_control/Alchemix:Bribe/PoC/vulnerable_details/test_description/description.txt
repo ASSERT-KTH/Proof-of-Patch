@@ -1,7 +1,0 @@
-The test illustrates the issue by:
-
-Whitelist usds.
-Logging current reward token in the list.
-Malicious User calling the notifyRewardAmount to add USDC as rewards token into the list 
-with the usdc address and just 1 wei of amount.
-Shows that usdc has been added to the rewards list.
