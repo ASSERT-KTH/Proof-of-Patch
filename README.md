@@ -172,13 +172,18 @@ This dataset is ideal for:
 - `other`: Neither patch nor PoC
 
 ### **By Vulnerability Type**
-- Access Control
-- Reentrancy
-- Price Oracle Manipulation
-- Logic Errors
-- Integer Overflow/Underflow
-- Denial of Service (DoS)
-- And more...
+1. Access Control
+2. Reentrancy
+3. Price Oracle Manipulation
+4. Logic Errors
+5. Integer Overflow/Underflow
+6. Denial of Service (DoS)
+7. Lack of Input Validation
+8. Flash Loan Attack
+9. Insecure Randomness
+10. Unchecked External Calls
+
+
 
 ## 🔧 Technical Details
 
@@ -211,9 +216,7 @@ This dataset is ideal for:
 This dataset is provided for research purposes. When using this data, please cite:
 
 ```
-Proof-of-Patch Dataset: Smart Contract Audits with Mitigation Indicators
-[Your Name/Institution]
-[Year]
+TODO
 ```
 
 
