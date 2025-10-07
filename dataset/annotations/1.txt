@@ -1,0 +1,120 @@
+https://github.com/code-423n4/2024-06-size/blob/main/src/libraries/Multicall.sol#L29
+https://github.com/code-423n4/2024-06-size/blob/main/src/libraries/Multicall.sol#L37
+Impact
+
+The multicall(bytes[] calldata _data) function in the Size.sol contract does not work as intended. The intention of the multicall(bytes[] calldata _data) function is to allow users to access multiple functionalities of the Size protocol, such as a (deposit and repay) pair, by a single transaction to Size.sol:
+
+https://github.com/code-423n4/2024-06-size/blob/main/src/Size.sol#L142
+    function multicall(bytes[] calldata _data)
+        public
+        payable
+        override(IMulticall)
+        whenNotPaused
+        returns (bytes[] memory results)
+    {
+        results = state.multicall(_data);
+    }
+
+The multicall function allows batch processing of multiple interactions with the protocol in a single transaction. This also allows users to take actions that would otherwise be denied due to deposit limits. One of these actions is a (deposit and repay) pair.
+
+Let's say a credit-debt pair exists. Assume that the tenor of the debt is 1 year and the future value is 100ke6 USDC. Let's say the borrower decides to repay the loan just 1 day before the maturity ends. During this 1 year, the total supply of borrowAToken had increased so much that the total supply of borrowAToken was just 10e6 USDC worth below the cap (that is, just below the cap) at the time when the borrower decided to repay the loan.
+
+To repay a loan, Size requires the user to have sufficient borrowAToken:
+
+https://github.com/code-423n4/2024-06-size/blob/main/src/libraries/actions/Repay.sol#L49
+    function executeRepay(State storage state, RepayParams calldata params) external {
+        DebtPosition storage debtPosition = state.getDebtPosition(params.debtPositionId);
+​
+        state.data.borrowAToken.transferFrom(msg.sender, address(this), debtPosition.futureValue);
+        debtPosition.liquidityIndexAtRepayment = state.data.borrowAToken.liquidityIndex();
+        state.repayDebt(params.debtPositionId, debtPosition.futureValue);
+​
+        emit Events.Repay(params.debtPositionId);
+    }
+}
+
+The user achieves this by first depositing the required amount of underlying borrow tokens (here, USDC) and then calling the repay(RepayParams calldata params) function:
+
+https://github.com/code-423n4/2024-06-size/blob/main/src/libraries/DepositTokenLibrary.sol#L49
+    function depositUnderlyingBorrowTokenToVariablePool(State storage state, address from, address to, uint256 amount)
+        external
+    {
+        state.data.underlyingBorrowToken.safeTransferFrom(from, address(this), amount);
+​
+        IAToken aToken =
+            IAToken(state.data.variablePool.getReserveData(address(state.data.underlyingBorrowToken)).aTokenAddress);
+​
+        uint256 scaledBalanceBefore = aToken.scaledBalanceOf(address(this));
+​
+        state.data.underlyingBorrowToken.forceApprove(address(state.data.variablePool), amount);
+        state.data.variablePool.supply(address(state.data.underlyingBorrowToken), amount, address(this), 0);
+​
+        uint256 scaledAmount = aToken.scaledBalanceOf(address(this)) - scaledBalanceBefore;
+​
+        state.data.borrowAToken.mintScaled(to, scaledAmount);
+    }
+
+Now, in our case, when the borrower decides to deposit 100ke6 USDC (at max if it would have some existing borrowAToken), he would not be able to do so (as the cap would be hit by depositing just 10e6 USDC). The situation is that the tenor is about to end (1 day left) and the borrower is not able to repay, not because he does not have money, but because borrowAToken's total supply cap does not allow him to deposit enough USDC.
+
+To mitigate this, Size provides the multicall function, that bypasses the deposit limit and allows users to carry out such actions (LOC-80 in Deposit.sol):
+
+https://github.com/code-423n4/2024-06-size/blob/main/src/libraries/actions/Deposit.sol#L80
+    function executeDeposit(State storage state, DepositParams calldata params) public {
+        address from = msg.sender;
+        uint256 amount = params.amount;
+        if (msg.value > 0) {
+            // do not trust msg.value (see `Multicall.sol`)
+            amount = address(this).balance;
+            // slither-disable-next-line arbitrary-send-eth
+            state.data.weth.deposit{value: amount}();
+            state.data.weth.forceApprove(address(this), amount);
+            from = address(this);
+        }
+​
+        if (params.token == address(state.data.underlyingBorrowToken)) {
+            state.depositUnderlyingBorrowTokenToVariablePool(from, params.to, amount);
+            // borrow aToken cap is not validated in multicall,
+            //   since users must be able to deposit more tokens to repay debt
+            if (!state.data.isMulticall) {
+                state.validateBorrowATokenCap();
+            }
+        } else {
+            state.depositUnderlyingCollateralToken(from, params.to, amount);
+        }
+​
+        emit Events.Deposit(params.token, params.to, amount);
+    }
+}
+
+Let's say a user uses the multicall function for a (deposit and repay) pair action. The multicall function checks for an invariant that restricts users from depositing more borrowATokens than required to repay the loan by restricting:
+    increase in borrowAToken supply <= decrease in debtToken supply
+
+https://github.com/code-423n4/2024-06-size/blob/main/src/libraries/CapsLibrary.sol#L19
+    function validateBorrowATokenIncreaseLteDebtTokenDecrease(
+        State storage state,
+        uint256 borrowATokenSupplyBefore,
+        uint256 debtTokenSupplyBefore,
+        uint256 borrowATokenSupplyAfter,
+        uint256 debtTokenSupplyAfter
+    ) external view {
+        // If the supply is above the cap
+        if (borrowATokenSupplyAfter > state.riskConfig.borrowATokenCap) {
+            uint256 borrowATokenSupplyIncrease = borrowATokenSupplyAfter > borrowATokenSupplyBefore
+                ? borrowATokenSupplyAfter - borrowATokenSupplyBefore
+                : 0;
+            uint256 debtATokenSupplyDecrease =
+                debtTokenSupplyBefore > debtTokenSupplyAfter ? debtTokenSupplyBefore - debtTokenSupplyAfter : 0;
+​
+            // and the supply increase is greater than the debt reduction
+            if (borrowATokenSupplyIncrease > debtATokenSupplyDecrease) {
+                // revert
+                revert Errors.BORROW_ATOKEN_INCREASE_EXCEEDS_DEBT_TOKEN_DECREASE(
+                    borrowATokenSupplyIncrease, debtATokenSupplyDecrease
+                );
+            }
+            // otherwise, it means the debt reduction was greater than the inflow of cash: do not revert
+        }
+        // otherwise, the supply is below the cap: do not revert
+    }
+
+The problem is, this is the exact invariant that is broken. 
