@@ -1,3 +1,6 @@
 [submodule "dataset/findings/1/2024-06-size"]
 	path = dataset/findings/1/2024-06-size
 	url = https://github.com/code-423n4/2024-06-size.git
+[submodule "dataset/findings/3/2023-07-pooltogether"]
+	path = dataset/findings/3/2023-07-pooltogether
+	url = https://github.com/code-423n4/2023-07-pooltogether.git

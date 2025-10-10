@@ -1,0 +1,28 @@
+{
+  "1": {
+    "finding_id": 1,
+    "code_repo": "https://github.com/code-423n4/2024-06-size.git",
+    "repo_name": "2024-06-size",
+    "project_path": "src/",
+    "target_directory": "dataset/1/projects/2024-06-size",
+    "added_timestamp": "2025-10-07T14:59:37.142842",
+    "finding_link": "https://solodit.cyfrin.io/issues/m-01-multicall-does-not-work-as-intended-code4rena-size-size-git",
+    "main_contract": "src/Size.sol",
+    "annotations": "dataset/annotations/0.txt",
+    "expected_vulnerability": "access control",
+    "difficulty": "Medium",
+    "patch": "dataset/patches/1/",
+    "patch_ref": "https://github.com/SizeCredit/size-solidity/pull/126",
+    "test_fix_commands": "forge test --match-path test/local/actions/Multicall.t.sol"
+  },
+  "3": {
+    "finding_id": 3,
+    "code_repo": "https://github.com/code-423n4/2023-07-pooltogether.git",
+    "repo_name": "2023-07-pooltogether",
+    "project_path": "vault/src/",
+    "test_fix_commands": "forge test --match-path test/unit/Vault/Vault.t.sol",
+    "patch": "patches/3",
+    "patch_ref": "https://github.com/GenerationSoftware/pt-v5-vault/pull/7/files",
+    "annotations": "annotations/3.txt"
+  }
+}
