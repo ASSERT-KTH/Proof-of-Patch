@@ -23,6 +23,25 @@
     "test_fix_commands": "forge test --match-path test/unit/Vault/Vault.t.sol",
     "patch": "patches/3",
     "patch_ref": "https://github.com/GenerationSoftware/pt-v5-vault/pull/7/files",
-    "annotations": "annotations/3.txt"
+    "annotations": "annotations/3.txt",
+    "expected_vulnerability": "access control"
+  },
+  "8": {
+    "finding_id": 8,
+    "code_repo": "https://github.com/code-423n4/2023-09-centrifuge.git",
+    "repo_name": "2023-09-centrifuge",
+    "main_contract": "src/LiquidityPool.sol",
+    "project_path": "src/",
+    "target_directory": "dataset/findings/8/2023-09-centrifuge",
+    "patch": "patches/8",
+    "patch_ref": "from_audit",
+    "added_timestamp": "2025-10-14T16:54:29.289059",
+    "finding_link": "https://solodit.cyfrin.io/issues/m-05-investors-claiming-their-maxdeposit-by-using-the-liquiditypooldeposit-will-cause-other-users-to-be-unable-to-claim-their-maxdepositmaxmint-code4rena-centrifuge-centrifuge-git",
+    "expected_vulnerability": "logic error",
+    "difficulty": "medium",
+    "audit_ref": "https://solodit.cyfrin.io/issues/m-05-investors-claiming-their-maxdeposit-by-using-the-liquiditypooldeposit-will-cause-other-users-to-be-unable-to-claim-their-maxdepositmaxmint-code4rena-centrifuge-centrifuge-git",
+    "annotations": "annotations/8.txt",
+    "poc_path": "pocs/8",
+    "poc_ref": "https://solodit.cyfrin.io/issues/m-05-investors-claiming-their-maxdeposit-by-using-the-liquiditypooldeposit-will-cause-other-users-to-be-unable-to-claim-their-maxdepositmaxmint-code4rena-centrifuge-centrifuge-git"
   }
 }

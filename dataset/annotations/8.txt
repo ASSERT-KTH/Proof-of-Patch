@@ -1,0 +1,45 @@
+Claiming deposits using the LiquidityPool.deposit() will cause the Escrow contract to not have enough shares to allow other investors to claim their maxDeposit or maxMint values for their deposited assets.
+Proof of Concept
+
+    Before an investor can claim their deposits, they first needs to request the deposit and wait for the Centrigue Chain to validate it in the next epoch.
+
+    Investors can request deposits at different epochs without the need to claim all the approved deposits before requesting a new deposit, in the end, the maxDeposit and maxMint values that the investor can claim will be increased accordingly based on all the request deposits that the investor makes.
+
+    When the requestDeposit of the investor is processed in the Centrifuge chain, a number of TrancheShares will be minted based on the price at the moment when the request was processed and the total amount of deposited assets, this TrancheShares will be deposited to the Escrow contract, and the TrancheShares will be waiting for the investors to claim their deposits.
+
+    When investors decide to claim their deposit they can use the LiquidityPool.deposit() function, this function receives as arguments the number of assets that are being claimed and the address of the account to claim the deposits for.
+
+function deposit(uint256 assets, address receiver) public returns (uint256 shares) {
+    shares = investmentManager.processDeposit(receiver, assets);
+    emit Deposit(address(this), receiver, assets, shares);
+}
+
+    The LiquidityPool.deposit() function calls the InvestmentManager::processDeposit() which will validate that the amount of assets being claimed doesn't exceed the investor's deposit limits, will compute the deposit price in the InvestmentManager::calculateDepositPrice(), which basically computes an average price for all the request deposits that have been accepted in the Centrifuge Chain, each of those request deposits could've been executed at a different price, so, this function, based on the values of maxDeposit and maxMint will estimate an average price for all the unclaimed deposits, later, using this computed price for the deposits will compute the equivalent of TrancheTokens for the CurrencyAmount being claimed, and finally, processDeposit() will transferFrom the escrow to the investor account the computed amount of TranchTokens.
+
+function processDeposit(address user, uint256 currencyAmount) public auth returns (uint256 trancheTokenAmount) {
+    address liquidityPool = msg.sender;
+    uint128 _currencyAmount = _toUint128(currencyAmount);
+    require(
+        //@audit-info => orderbook[][].maxDeposit is updated when the handleExecutedCollectInvest() was executed!
+        //@audit-info => The orderbook keeps track of the number of TrancheToken shares that have been minted to the Escrow contract on the user's behalf!
+        (_currencyAmount <= orderbook[user][liquidityPool].maxDeposit && _currencyAmount != 0),
+        "InvestmentManager/amount-exceeds-deposit-limits"
+    );
+​
+    //@audit-info => computes an average price for all the request deposits that have been accepted in the Centrifuge Chain and haven't been claimed yet!
+    uint256 depositPrice = calculateDepositPrice(user, liquidityPool);
+    require(depositPrice != 0, "LiquidityPool/deposit-token-price-0");
+​
+    //@audit-info => Based on the computed depositPrice will compute the equivalent of TrancheTokens for the CurrencyAmount being claimed
+    uint128 _trancheTokenAmount = _calculateTrancheTokenAmount(_currencyAmount, liquidityPool, depositPrice);
+​
+    //@audit-info => transferFrom the escrow to the investor account the computed amount of TranchTokens.
+    _deposit(_trancheTokenAmount, _currencyAmount, liquidityPool, user);
+    trancheTokenAmount = uint256(_trancheTokenAmount);
+}
+
+The problem occurs when an investor hasn't claimed their deposits and has requested multiple deposits on different epochs at different prices. The InvestmentManager::calculateDepositPrice() function will compute an equivalent/average price for all the requestDeposits that haven't been claimed yet. Because of the different prices that the request deposits where processed at, the computed price will compute the most accurate average of the deposit's price, but there is a slight rounding error that causes the computed value of trancheTokenAmount to be slightly different from what it should exactly be.
+
+    That slight difference will make that the Escrow contract transfers slightly more shares to the investor claiming the deposits by using the LiquidityPool.deposit()
+
+    As a result, when another investor tries to claim their maxDeposit or maxMint, now the Escrow contract doesn't have enough shares to make whole the request of the other investor, and as a consequence the other investor transaction will be reverted. That means the second investor won't be able to claim all the shares that it is entitled to claim because the Escrow contract doesn't have all those shares anymore
