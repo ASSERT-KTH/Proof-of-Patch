@@ -43,5 +43,21 @@
     "annotations": "annotations/8.txt",
     "poc_path": "pocs/8",
     "poc_ref": "https://solodit.cyfrin.io/issues/m-05-investors-claiming-their-maxdeposit-by-using-the-liquiditypooldeposit-will-cause-other-users-to-be-unable-to-claim-their-maxdepositmaxmint-code4rena-centrifuge-centrifuge-git"
+  },
+  "9": {
+    "finding_id": 9,
+    "code_repo": "https://github.com/code-423n4/2023-04-caviar.git",
+    "repo_name": "2023-04-caviar",
+    "main_contract": "src/PrivatePool.sol",
+    "target_directory": "dataset/findings/9/2023-04-caviar",
+    "patch": "patches/9",
+    "patch_ref": "https://github.com/outdoteth/caviar-private-pools/pull/11/files",
+    "added_timestamp": "2025-10-14T17:16:11.815826",
+    "finding_link": "https://solodit.cyfrin.io/issues/m-08-loss-of-funds-for-traders-due-to-accounting-error-in-royalty-calculations-code4rena-caviar-caviar-private-pools-git",
+    "expected_vulnerability": "logic error",
+    "difficulty": "medium",
+    "audit_ref": "https://solodit.cyfrin.io/issues/m-08-loss-of-funds-for-traders-due-to-accounting-error-in-royalty-calculations-code4rena-caviar-caviar-private-pools-git",
+    "annotations": "annotations/9.txt",
+    "test_fix_commands": "forge test --match-path test/PrivatePool/Withdraw.t.sol"
   }
 }
