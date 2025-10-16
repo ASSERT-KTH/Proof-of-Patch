@@ -94,5 +94,22 @@
     "test_fix_commands": "forge test --match-path test/PrivatePool/Buy.t.sol --ffi --gas-report",
     "poc_path": "pocs/18",
     "poc_ref": "https://github.com/code-423n4/2023-04-caviar-findings/issues/230"
+  },
+  "20": {
+    "finding_id": 20,
+    "code_repo": "https://github.com/sherlock-audit/2023-12-dodo-gsp.git",
+    "repo_name": "2023-12-dodo-gsp",
+    "main_contract": "dodo-gassaving-pool/contracts/GasSavingPool/impl/GSPFunding.sol",
+    "target_directory": "dataset/findings/20/2023-12-dodo-gsp",
+    "patch": "patches/20",
+    "patch_ref": "https://github.com/DODOEX/dodo-gassaving-pool/pull/14/files",
+    "added_timestamp": "2025-10-16T18:21:14.109499",
+    "finding_link": "https://solodit.cyfrin.io/issues/m-3-share-price-inflation-by-first-lp-er-enabling-dos-attacks-on-subsequent-buyshares-with-up-to-1001x-the-attacking-cost-sherlock-dodo-gsp-git",
+    "expected_vulnerability": "denial of service",
+    "difficulty": "medium",
+    "annotations": "annotations/20.txt",
+    "test_fix_commands": "cd dodo-gassaving-pool & npm install & forge compile",
+    "poc_path": "pocs/20",
+    "poc_ref": "https://solodit.cyfrin.io/issues/m-3-share-price-inflation-by-first-lp-er-enabling-dos-attacks-on-subsequent-buyshares-with-up-to-1001x-the-attacking-cost-sherlock-dodo-gsp-git"
   }
 }
