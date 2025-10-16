@@ -59,5 +59,40 @@
     "audit_ref": "https://solodit.cyfrin.io/issues/m-08-loss-of-funds-for-traders-due-to-accounting-error-in-royalty-calculations-code4rena-caviar-caviar-private-pools-git",
     "annotations": "annotations/9.txt",
     "test_fix_commands": "forge test --match-path test/PrivatePool/Withdraw.t.sol"
+  },
+  "15": {
+    "finding_id": 15,
+    "code_repo": "https://github.com/code-423n4/2023-07-pooltogether.git",
+    "repo_name": "2023-07-pooltogether",
+    "main_contract": "vault/src/Vault.sol",
+    "target_directory": "dataset/findings/15/2023-07-pooltogether",
+    "patch": "patches/15",
+    "patch_ref": "https://github.com/GenerationSoftware/pt-v5-vault/pull/21/files#diff-cf7b3df22598b866c0f9c72fe3d306632a6c6987727185fb8089d4616b257c2c",
+    "added_timestamp": "2025-10-16T14:26:02.712543",
+    "finding_link": "https://solodit.cyfrin.io/issues/m-02-unintended-or-malicious-use-of-prize-winners-hooks-code4rena-pooltogether-pooltogether-git",
+    "expected_vulnerability": "denial of service",
+    "difficulty": "high",
+    "audit_ref": "https://github.com/code-423n4/2023-07-pooltogether-findings/issues/465#issuecomment-1644789666",
+    "annotations": "annotations/15.txt",
+    "test_fix_commands": "cd vault & forge test",
+    "poc_path": "pocs/15",
+    "poc_ref": "https://solodit.cyfrin.io/issues/m-02-unintended-or-malicious-use-of-prize-winners-hooks-code4rena-pooltogether-pooltogether-git"
+  },
+  "18": {
+    "finding_id": 18,
+    "code_repo": "https://github.com/code-423n4/2023-04-caviar.git",
+    "repo_name": "2023-04-caviar",
+    "main_contract": "src/PrivatePool.sol",
+    "target_directory": "dataset/findings/18/2023-04-caviar",
+    "patch": "patches/18",
+    "patch_ref": "https://github.com/outdoteth/caviar-private-pools/pull/2/files#diff-6beea546a01e795e1365ca8a74b2bd952631f6cd228a5a869bfed82bf1f46a0f",
+    "added_timestamp": "2025-10-16T15:01:52.181214",
+    "finding_link": "https://solodit.cyfrin.io/issues/m-15-pool-tokens-can-be-stolen-via-privatepoolflashloan-function-from-previous-owner-code4rena-caviar-caviar-git",
+    "expected_vulnerability": "flash loan",
+    "difficulty": "high",
+    "annotations": "annotations/18.txt",
+    "test_fix_commands": "forge test --match-path test/PrivatePool/Buy.t.sol --ffi --gas-report",
+    "poc_path": "pocs/18",
+    "poc_ref": "https://github.com/code-423n4/2023-04-caviar-findings/issues/230"
   }
 }
