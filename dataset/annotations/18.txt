@@ -1,0 +1,16 @@
+PrivatePool.sol ERC721 and ERC20 tokens can be stolen by the previous owner via execute and flashLoan functions (or by malicious approval by the current owner via execute)
+Proof of Concept
+
+Let's say that Bob is the attacker and Alice is a regular user.
+
+    Bob creates a PrivatePool.sol where he deposits 5 ERC721 tokens and 500 USDC.
+
+    Then Bob creates a malicious contract (let's call it PrivatePoolExploit.sol) and this contract contains onFlashLoan (IERC3156FlashBorrower), transferFrom , ownerOf, onERC721Received functions (like ERC721 does) and an additional attack function.
+
+    Via PrivatePool.execute function Bob approves USDC spending (type(uint).max) and setApprovalForAll for ERC721 tokens
+
+    Since the ownership of PrivatePool is stored in Factory.sol as an ERC721 token, ownership can be sold on any ERC721 marketplace. Alice decides to buy Bob's PrivatePool and ownership is transferred to Alice.
+
+    Right after the ownership is transferred, Bob runs PrivatePoolExploit.attack function, which calls PrivatePool.flashLoan where PrivatePoolExploit.transferFrom will be called since the flash loan can be called on any address.
+
+    All the funds are stolen by Bob and Alice's PrivatePool is left with nothing.
