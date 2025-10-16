@@ -1,0 +1,8 @@
+The setHooks function in Vault.sol allows users to set arbitrary hooks, potentially enabling them to make external calls with unintended consequences. This vulnerability could lead to various unexpected behaviors, such as unauthorized side transactions with gas paid unbeknownst to the claimer, reentrant calls, or denial-of-service attacks on claiming transactions.
+
+Vault.sol#L653
+function setHooks(VaultHooks memory hooks) external {
+    _hooks[msg.sender] = hooks; 
+​
+    emit SetHooks(msg.sender, hooks);
+  }

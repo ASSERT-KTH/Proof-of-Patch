@@ -10,3 +10,9 @@
 [submodule "dataset/findings/9/2023-04-caviar"]
 	path = dataset/findings/9/2023-04-caviar
 	url = https://github.com/code-423n4/2023-04-caviar.git
+[submodule "dataset/findings/15/2023-07-pooltogether"]
+	path = dataset/findings/15/2023-07-pooltogether
+	url = https://github.com/code-423n4/2023-07-pooltogether.git
+[submodule "dataset/findings/18/2023-04-caviar"]
+	path = dataset/findings/18/2023-04-caviar
+	url = https://github.com/code-423n4/2023-04-caviar.git
