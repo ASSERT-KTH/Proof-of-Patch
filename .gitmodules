@@ -16,3 +16,6 @@
 [submodule "dataset/findings/18/2023-04-caviar"]
 	path = dataset/findings/18/2023-04-caviar
 	url = https://github.com/code-423n4/2023-04-caviar.git
+[submodule "dataset/findings/20/2023-12-dodo-gsp"]
+	path = dataset/findings/20/2023-12-dodo-gsp
+	url = https://github.com/sherlock-audit/2023-12-dodo-gsp.git
