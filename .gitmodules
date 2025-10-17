@@ -19,3 +19,9 @@
 [submodule "dataset/findings/20/2023-12-dodo-gsp"]
 	path = dataset/findings/20/2023-12-dodo-gsp
 	url = https://github.com/sherlock-audit/2023-12-dodo-gsp.git
+[submodule "dataset/findings/32/2022-06-putty"]
+	path = dataset/findings/32/2022-06-putty
+	url = https://github.com/code-423n4/2022-06-putty.git
+[submodule "dataset/findings/33/2023-04-caviar"]
+	path = dataset/findings/33/2023-04-caviar
+	url = https://github.com/code-423n4/2023-04-caviar.git

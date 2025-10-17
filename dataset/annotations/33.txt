@@ -1,0 +1,14 @@
+Private Pools support NFT borrowing using flash loans. Users that decide to use this feature have to pay a flash loan fee to the owner of the pool.
+
+The contract has a changeFee variable that is used to configure the fee for changing NFTs, and this variable is also used to determine the fee for flash loans. In the case of a change operation, the value is interpreted as an amount with 4 decimals, and the token is the base token of the pool. This means that, for example, if the base token is ETH, a changeFee value of 25 should be interpreted as a fee of 0.0025 ETH for change operation.
+
+However, as we can see in this following snippet, the flashFee function just returns the value of changeFee without any scaling or modification.
+
+https://github.com/code-423n4/2023-04-caviar/blob/main/src/PrivatePool.sol#L750-L752
+750:     function flashFee(address, uint256) public view returns (uint256) {
+751:         return changeFee;
+752:     }
+
+This means that, following the previous example, a changeFee value of 25 will result in 0.0025 ETH for change operation, but just 25 wei for flash loans.
+
+The documentation hints that this value should also be scaled to 4 decimals in the case of the flash loan fee, but in any case this is clearly an incorrect setting of the flash loan fee.
