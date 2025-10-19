@@ -1,0 +1,27 @@
+Seller's funds may remain locked in the protocol, because of revert on 0 transfer tokens.
+In the README.md file is stated that the protocol uses every token with ERC20 Metadata and decimals between 6-18, which includes some revert on 0 transfer tokens, so this should be considered as valid issue!
+Vulnerability Detail
+
+in the AuctionHouse::claimProceeds() function there is the following block of code:
+       uint96 prefundingRefund = routing.funding + payoutSent_ - sold_;
+        unchecked {
+            routing.funding -= prefundingRefund;
+        }
+        Transfer.transfer(
+            routing.baseToken,
+            _getAddressGivenCallbackBaseTokenFlag(routing.callbacks, routing.seller),
+            prefundingRefund,
+            false
+        );
+
+Since the batch auctions must be prefunded so routing.funding shouldn’t be zero unless all the tokens were sent in settle, in which case payoutSent will equal sold_. From this we make the conclusion that it is possible for prefundingRefund to be equal to 0. This means if the routing.baseToken is a revert on 0 transfer token the seller will never be able to get the quoteToken he should get from the auction.
+Impact
+
+The seller's funds remain locked in the system and he will never be able to get them back.
+Code Snippet
+
+The problematic block of code in the AuctionHouse::claimProceeds() function:
+https://github.com/sherlock-audit/2024-03-axis-finance/blob/main/moonraker/src/AuctionHouse.sol#L604-L613
+
+Transfer::transfer() function, since it transfers the baseToken:
+https://github.com/sherlock-audit/2024-03-axis-finance/blob/main/moonraker/src/lib/Transfer.sol#L49-L68

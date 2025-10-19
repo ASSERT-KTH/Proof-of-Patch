@@ -25,3 +25,9 @@
 [submodule "dataset/findings/33/2023-04-caviar"]
 	path = dataset/findings/33/2023-04-caviar
 	url = https://github.com/code-423n4/2023-04-caviar.git
+[submodule "dataset/findings/39/2024-03-axis-finance"]
+	path = dataset/findings/39/2024-03-axis-finance
+	url = https://github.com/sherlock-audit/2024-03-axis-finance.git
+[submodule "dataset/findings/41/2024-03-axis-finance"]
+	path = dataset/findings/41/2024-03-axis-finance
+	url = https://github.com/sherlock-audit/2024-03-axis-finance.git

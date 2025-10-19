@@ -1,0 +1,8 @@
+In the auction house whenever a new auction (lot) is created, its details are recorded at the 0th index in the lotRouting mapping. This allows for an attacker to create an auction right after an honest user and take over their auction, allowing them to steal funds in the case of a prefunded auction.
+Vulnerability Detail
+
+When a new auction is created via AuctionHouse#auction(), it's routing details are recorded directly in storage at lotRouting[lotId] where lotId is the return value of the auction() function itself. Since the return value is declared as a variable at the function signature level, it is initialized with the value of 0.
+
+This means that when the routing storage variable is declared (Routing storage routing = lotRouting[lotId];) it will always point to lotRouting[0] as the value of lotId is set a bit later in the auction() function to the correct index. This itself leads to the issue that an honest user can create a prefunded auction and an attacker can then come in, create a new auction themselves that is not prefunded and be immediately entitled to the honest user's prefunded funds by cancelling the auction they've just created as they're set as the seller of the lot at lotRouting[0].
+
+This attack is also possible because the funding attribute of a lot is only set if an auction is specified to be prefunded in its parameters at creation.
