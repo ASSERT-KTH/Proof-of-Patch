@@ -177,5 +177,22 @@
     "test_fix_commands": "cd moonracker & forge test --list",
     "poc_path": "pocs/41",
     "poc_ref": "https://solodit.cyfrin.io/issues/h-1-malicious-user-can-overtake-a-prefunded-auction-and-steal-the-deposited-funds-sherlock-axis-finance-git"
+  },
+  "42": {
+    "finding_id": 42,
+    "code_repo": "https://github.com/sherlock-audit/2025-07-cap.git",
+    "repo_name": "2025-07-cap",
+    "main_contract": "cap-contracts/contracts/oracle/libraries/VaultAdapter.sol",
+    "target_directory": "dataset/findings/42/2025-07-cap",
+    "patch": "patches/42",
+    "patch_ref": "https://github.com/cap-labs-dev/cap-contracts/pull/187/files",
+    "added_timestamp": "2025-10-20T00:34:54.747246",
+    "finding_link": "https://solodit.cyfrin.io/issues/m-2-utilization-rate-multiplier-will-not-shift-if-oracle-is-consulted-frequently-sherlock-cap-git",
+    "expected_vulnerability": "access control",
+    "difficulty": "medium",
+    "annotations": "annotations/42.txt",
+    "test_fix_commands": "cd cap-contracts & forge test --list",
+    "poc_path": "pocs/42",
+    "poc_ref": "https://solodit.cyfrin.io/issues/m-2-utilization-rate-multiplier-will-not-shift-if-oracle-is-consulted-frequently-sherlock-cap-git"
   }
 }

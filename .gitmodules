@@ -31,3 +31,6 @@
 [submodule "dataset/findings/41/2024-03-axis-finance"]
 	path = dataset/findings/41/2024-03-axis-finance
 	url = https://github.com/sherlock-audit/2024-03-axis-finance.git
+[submodule "dataset/findings/42/2025-07-cap"]
+	path = dataset/findings/42/2025-07-cap
+	url = https://github.com/sherlock-audit/2025-07-cap.git

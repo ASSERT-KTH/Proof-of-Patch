@@ -1,0 +1,48 @@
+Due to round down issue in VaultAdapter's multiplier shift calculation, utilization rate will not increase/decrease if oracle is consulted frequently.
+Root Cause
+
+Root cause resides in multiplier calculation in VaultAdapter.sol:
+
+File: cap-contracts/contracts/oracle/libraries/VaultAdapter.sol
+86: if (_utilization > slopes.kink) {
+87:             uint256 excess = _utilization - slopes.kink;
+88:@>           utilizationData.multiplier = utilizationData.multiplier
+89:                 * (1e27 + (1e27 * excess / (1e27 - slopes.kink)) * (_elapsed * $.rate / 1e27)) / 1e27;
+90: 
+91:             if (utilizationData.multiplier > $.maxMultiplier) {
+92:                 utilizationData.multiplier = $.maxMultiplier;
+93:             }
+94: 
+95:             interestRate = (slopes.slope0 + (slopes.slope1 * excess / 1e27)) * utilizationData.multiplier / 1e27;
+96:         } else {
+97:@>           utilizationData.multiplier = utilizationData.multiplier * 1e27
+98:                 / (1e27 + (1e27 * (slopes.kink - _utilization) / slopes.kink) * (_elapsed * $.rate / 1e27));
+99: 
+100:             if (utilizationData.multiplier < $.minMultiplier) {
+101:                 utilizationData.multiplier = $.minMultiplier;
+102:             }
+103: 
+104:             interestRate = (slopes.slope0 * _utilization / slopes.kink) * utilizationData.multiplier / 1e27;
+105:         }
+
+More specifically, rounding issue happens in the following calculation:
+(_elapsed * $.rate / 1e27)
+_elapsed is diff between block.timestamp and utilizationData.lastUpdate. This means one can consult rate oracle frequently to make this term 0.
+
+As a result, utilizationData.multiplier will not shift in L88 and L97.
+Internal Pre-conditions
+
+n/a
+External Pre-conditions
+
+n/a
+Attack Path
+
+Attacker calls Oracle::utilizationRate function frequently.
+
+The interval depends on rate parameter of VaultAdapter contract.
+
+For example, if the rate is set so that multiplier is shifted fully in 24 hours window, the attacker can consult the oracle every 23 hours to prevent multiplier shifts.
+Impact
+
+DebtToken's interest rate calculation will be affected. The attacker can prevent it from increasing during high LTV, or vice versa during low LTV.
