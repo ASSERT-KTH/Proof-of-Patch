@@ -194,5 +194,22 @@
     "test_fix_commands": "cd cap-contracts & forge test --list",
     "poc_path": "pocs/42",
     "poc_ref": "https://solodit.cyfrin.io/issues/m-2-utilization-rate-multiplier-will-not-shift-if-oracle-is-consulted-frequently-sherlock-cap-git"
+  },
+  "46": {
+    "finding_id": 46,
+    "code_repo": "https://github.com/code-423n4/2023-05-xeth.git",
+    "repo_name": "2023-05-xeth",
+    "main_contract": "src/CVXStaker.sol",
+    "target_directory": "dataset/findings/46/2023-05-xeth",
+    "patch": "patches/46",
+    "patch_ref": "https://github.com/code-423n4/2023-05-xeth/commit/1f714868f193cdeb472ec097110901a997d87ec4",
+    "added_timestamp": "2025-10-20T01:06:45.169983",
+    "finding_link": "https://solodit.cyfrin.io/issues/m-03-zero-token-transfer-can-cause-a-potential-dos-in-cvxstaker-code4rena-xeth-xeth-versus-contest-git",
+    "expected_vulnerability": "denial of service",
+    "difficulty": "medium",
+    "annotations": "annotations/46.txt",
+    "test_fix_commands": "declare MAINNET_RPC_URL",
+    "poc_path": "pocs/46",
+    "poc_ref": "https://gist.githubusercontent.com/romeroadrian/475d1f809301c5a0ccf2e6e9bec85472/raw/fc0ab8392815cb3d43d4341a3330c03360c78ca4/2023-05-xeth-Audit.t.sol"
   }
 }

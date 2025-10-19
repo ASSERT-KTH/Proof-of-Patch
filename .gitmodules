@@ -34,3 +34,6 @@
 [submodule "dataset/findings/42/2025-07-cap"]
 	path = dataset/findings/42/2025-07-cap
 	url = https://github.com/sherlock-audit/2025-07-cap.git
+[submodule "dataset/findings/46/2023-05-xeth"]
+	path = dataset/findings/46/2023-05-xeth
+	url = https://github.com/code-423n4/2023-05-xeth.git

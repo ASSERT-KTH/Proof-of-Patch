@@ -1,0 +1,25 @@
+The CVXStaker contract doesn't check for zero amount while transferring rewards, which can end up blocking the operation.
+
+The CVXStaker contract is in charge of handling interaction with the Convex pool. The getReward() function is used to claim rewards and transfer them to the rewards recipient:
+
+https://github.com/code-423n4/2023-05-xeth/blob/main/src/CVXStaker.sol#L185-L198
+185:     function getReward(bool claimExtras) external {
+186:         IBaseRewardPool(cvxPoolInfo.rewards).getReward(
+187:             address(this),
+188:             claimExtras
+189:         );
+190:         if (rewardsRecipient != address(0)) {
+191:             for (uint i = 0; i < rewardTokens.length; i++) {
+192:                 uint256 balance = IERC20(rewardTokens[i]).balanceOf(
+193:                     address(this)
+194:                 );
+195:                 IERC20(rewardTokens[i]).safeTransfer(rewardsRecipient, balance);
+196:             }
+197:         }
+198:     }
+
+As we can see in the previous snippet of code, the implementation will loop all the configured reward tokens and transfer them one by one to the reward recipient.
+
+This is a bit concerning as some ERC20 implementations revert on zero value transfers (see https://github.com/d-xo/weird-erc20#revert-on-zero-value-transfers). If at least one of the reward tokens includes this behavior, then the current implementation may cause a denial of service, as a zero amount transfer in this token will block the whole action and revert the transaction.
+
+Note that the rewards array is not modifiable, it is defined at construction time, a token cannot be removed.
