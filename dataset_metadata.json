@@ -340,5 +340,23 @@
     "test_fix_commands": "forge build && forge test",
     "poc_path": "pocs/77",
     "poc_ref": "https://github.com/code-423n4/2024-02-ai-arena-findings/issues/37#issuecomment-1975461186"
+  },
+  "91": {
+    "finding_id": 91,
+    "code_repo": "https://github.com/code-423n4/2023-07-basin.git",
+    "repo_name": "2023-07-basin",
+    "main_contract": "src/Well.sol",
+    "target_directory": "dataset/findings/91/2023-07-basin",
+    "patch": "patches/91",
+    "patch_ref": "https://github.com/BeanstalkFarms/Basin/blob/91233a22005986aa7c9f3b0c67393842cd8a8e4d/src/Well.sol#L380",
+    "added_timestamp": "2025-10-22T18:28:59.735894",
+    "finding_link": "https://solodit.cyfrin.io/issues/h-01-pumps-are-not-updated-in-the-shift-and-sync-functions-allowing-oracle-manipulation-code4rena-basin-basin-git",
+    "difficulty": "high",
+    "audit_ref": "https://code4rena.com/reports/2023-07-basin",
+    "annotations": "annotations/91.txt",
+    "test_fix_commands": "forge build",
+    "poc_path": "pocs/91",
+    "poc_ref": "https://github.com/code-423n4/2023-07-basin-findings/issues/136#issuecomment-1689106144",
+    "expected_vulnerability": "price oracle manipulation"
   }
 }
