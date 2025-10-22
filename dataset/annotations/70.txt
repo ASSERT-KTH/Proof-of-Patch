@@ -1,0 +1,17 @@
+The pausing mechanism of PhiNFT1155 contract is implemented incorrectly and doesn't work. Users are still able to transfer NFTs in paused state.
+Summary
+
+Contract PhiNFT1155 inherits from the following parent contracts:
+contract PhiNFT1155 is
+    Initializable,
+    UUPSUpgradeable,
+    ERC1155SupplyUpgradeable,
+    ReentrancyGuardUpgradeable,
+    PausableUpgradeable,
+    Ownable2StepUpgradeable,
+    IPhiNFT1155,
+    Claimable,
+    CreatorRoyaltiesControl
+{
+
+The problem with the above is that inheriting from PausableUpgradeable is not effective in the scope of OZ ERC1155 contracts. As a result, users are able to transfer NFT tokens even when the contract is paused, as the below PoC demonstrates.

@@ -49,3 +49,15 @@
 [submodule "dataset/findings/54/2022-05-cally"]
 	path = dataset/findings/54/2022-05-cally
 	url = https://github.com/code-423n4/2022-05-cally.git
+[submodule "dataset/findings/58/2022-06-putty"]
+	path = dataset/findings/58/2022-06-putty
+	url = https://github.com/code-423n4/2022-06-putty.git
+[submodule "dataset/findings/66/2023-11-kelp"]
+	path = dataset/findings/66/2023-11-kelp
+	url = https://github.com/code-423n4/2023-11-kelp
+[submodule "dataset/findings/70/2024-08-ph"]
+	path = dataset/findings/70/2024-08-ph
+	url = https://github.com/code-423n4/2024-08-phi.git
+[submodule "dataset/findings/77/2024-02-ai-arena"]
+	path = dataset/findings/77/2024-02-ai-arena
+	url = https://github.com/code-423n4/2024-02-ai-arena.git

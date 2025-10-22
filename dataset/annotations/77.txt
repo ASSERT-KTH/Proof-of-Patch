@@ -1,0 +1,36 @@
+When a fighting round ends, winners for the current round get picked and allocated respective rewards. These rewards are fighter NFTs that can be claimed by such winners. When you claim your rewards for a round or several rounds, the numRoundsClaimed state variable which stores the number of rounds you've claimed for gets updated to reflect your claim and each winner can only ever claim up to the amounts they win for each given round. That means if you try to batch-claim for two given rounds for which you won 2 fighter NFTs, your NFT count after the claim should be whatever your current balance of NFT is plus 2 fighter NFTs.
+
+The issue here is that there's a way to mint additional fighter NFTs on top of the fighter NFTs you're owed for winning even though the claimRewards function has implemented a decent system to prevent over-claims. For one, it's relatively complex to spoof a call pretending to be the _mergingPoolAddress to mint but a malicious user doesn't need to worry too much about that to mint more fighters; they just need to leverage using a smart contract for engineering a simple reentrancy.
+Proof of Concept
+
+Consider this call path that allows a malicious user to reach this undesired state:
+
+    In-session fight round gets finalized.
+
+    An admin picks winners for the just finalized round.
+
+    Alice, one of the winners is entitled to 2 fighter NFTs just like Bob and decides to claim rewards for the rounds she participated in but keep in mind she joined the game with a smart contract.
+
+    Alice calls claimRewards supplying the args (string[] calldata modelURIs, string[] calldata modelTypes, uint256[2][] calldata customAttributes)
+
+    Those are valid arguments, hence the loop proceeds to make 2 NFT mints to her address.
+
+    Her address, being a smart contract manages to reenter the call to mint additional NFTs.
+
+    Alice ends up with more fighter NFTs instead of 2. Bob, who is an EOA gets the 2 NFTs he's owed but Alice has managed to gain more.
+
+The root cause of this issue stems from the roundId. The amount of times you can reenter the claimRewards function depends on the roundId. So let's say the roundId is 3, it mints 6 NFTs:
+
+    First loop mints once
+
+    Reenter mints the second time
+
+    Reenter again mints the third time
+
+    Cannot reenter anymore
+
+    Control is released so the call goes back to the second loop & finishes the mint
+
+    Call goes back & finishes the second and third mint
+
+    Alice or malicious caller ends up with 6 NFTs instead of 3
