@@ -358,5 +358,21 @@
     "poc_path": "pocs/91",
     "poc_ref": "https://github.com/code-423n4/2023-07-basin-findings/issues/136#issuecomment-1689106144",
     "expected_vulnerability": "price oracle manipulation"
+  },
+  "98": {
+    "finding_id": 98,
+    "code_repo": "https://github.com/code-423n4/2022-05-cally.git",
+    "repo_name": "2022-05-cally",
+    "main_contract": "contracts/src/Cally.sol",
+    "target_directory": "dataset/findings/98/2022-05-cally",
+    "patch": "patches/98",
+    "patch_ref": "https://github.com/outdoteth/cally/pull/5/files#diff-1e1434c836e3b4ed18bde8ad74366b557e8572f15450b32a1f49cd32bf543f2a",
+    "added_timestamp": "2025-10-22T18:53:01.085818",
+    "finding_link": "https://solodit.cyfrin.io/issues/h-03-wp-h0-fake-balances-can-be-created-for-not-yet-existing-erc20-tokens-which-allows-attackers-to-set-traps-to-steal-funds-from-future-users-code4rena-cally-cally-contest-git",
+    "expected_vulnerability": "reentrancy",
+    "difficulty": "high",
+    "audit_ref": "https://code4rena.com/contests/2022-05-cally-contest",
+    "annotations": "annotations/98.txt",
+    "test_fix_commands": "cd contracts && npm nstall && forge build"
   }
 }

@@ -64,3 +64,6 @@
 [submodule "dataset/findings/91/2023-07-basin"]
 	path = dataset/findings/91/2023-07-basin
 	url = https://github.com/code-423n4/2023-07-basin.git
+[submodule "dataset/findings/98/2022-05-cally"]
+	path = dataset/findings/98/2022-05-cally
+	url = https://github.com/code-423n4/2022-05-cally.git
