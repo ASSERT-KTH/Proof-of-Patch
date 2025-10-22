@@ -61,3 +61,6 @@
 [submodule "dataset/findings/77/2024-02-ai-arena"]
 	path = dataset/findings/77/2024-02-ai-arena
 	url = https://github.com/code-423n4/2024-02-ai-arena.git
+[submodule "dataset/findings/91/2023-07-basin"]
+	path = dataset/findings/91/2023-07-basin
+	url = https://github.com/code-423n4/2023-07-basin.git
