@@ -46,3 +46,6 @@
 [submodule "dataset/findings/50/2023-09-centrifuge"]
 	path = dataset/findings/51/2023-09-centrifuge
 	url = https://github.com/code-423n4/2023-09-centrifuge.git
+[submodule "dataset/findings/54/2022-05-cally"]
+	path = dataset/findings/54/2022-05-cally
+	url = https://github.com/code-423n4/2022-05-cally.git

@@ -1,0 +1,3 @@
+Some ERC20 tokens don't throw but just return false when a transfer fails. This can be abused to trick the createVault() function to initialize the vault without providing any tokens. A good example of such a token is ZRX: Etherscan code
+
+When such a vault is initialized, another user can both buy and exercise the option without ever receiving any funds. The creator of the vault does receive the buyer's Ether tho. So it can cause a loss of funds.

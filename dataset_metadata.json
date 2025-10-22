@@ -257,5 +257,21 @@
     "difficulty": "medium",
     "audit_ref": "https://github.com/code-423n4/2023-09-centrifuge-findings/issues/143#issuecomment-1745028559",
     "annotations": "annotations/50.txt"
+  },
+  "54": {
+    "finding_id": 54,
+    "code_repo": "https://github.com/code-423n4/2022-05-cally.git",
+    "repo_name": "2022-05-cally",
+    "main_contract": "contracts/src/Cally.sol",
+    "target_directory": "dataset/findings/54/2022-05-cally",
+    "patch": "patches/54",
+    "patch_ref": "https://github.com/outdoteth/cally/pull/4/files#diff-a2190f9619b29ed292ec7b6b48bf556cd5a7e7a24bf810ca54d24295b29d6fe1",
+    "added_timestamp": "2025-10-22T12:03:47.735064",
+    "finding_link": "https://github.com/code-423n4/2022-05-cally-findings/issues/187",
+    "expected_vulnerability": "\"reentrancy\"",
+    "difficulty": "High",
+    "audit_ref": "https://solodit.cyfrin.io/issues/h-01-no-revert-on-transfer-erc20-tokens-can-be-drained-code4rena-cally-cally-contest-git",
+    "annotations": "annotations/54.txt",
+    "test_fix_commands": "npm install && cd contracts && forge test --summary"
   }
 }
