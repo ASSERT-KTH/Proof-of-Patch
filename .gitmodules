@@ -43,3 +43,6 @@
 [submodule "dataset/findings/49/2023-08-cooler"]
 	path = dataset/findings/49/2023-08-cooler
 	url = https://github.com/sherlock-audit/2023-08-cooler.git
+[submodule "dataset/findings/50/2023-09-centrifuge"]
+	path = dataset/findings/51/2023-09-centrifuge
+	url = https://github.com/code-423n4/2023-09-centrifuge.git
