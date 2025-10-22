@@ -242,5 +242,20 @@
     "difficulty": "medium",
     "audit_ref": "https://github.com/sherlock-audit/2023-08-cooler-judging/issues/26",
     "annotations": "annotations/49.txt"
+  },
+  "51": {
+    "finding_id": 51,
+    "code_repo": "https://github.com/code-423n4/2023-09-centrifuge.git",
+    "repo_name": "2023-09-centrifuge",
+    "main_contract": "src/LiquidityPool.sol",
+    "target_directory": "dataset/findings/50/2023-09-centrifuge",
+    "patch": "patches/51",
+    "patch_ref": "from_audit",
+    "added_timestamp": "2025-10-21T16:13:07.781701",
+    "finding_link": "https://solodit.cyfrin.io/issues/m-04-you-can-deposit-really-small-amount-for-other-users-to-dos-them-code4rena-centrifuge-centrifuge-git",
+    "expected_vulnerability": "access control",
+    "difficulty": "medium",
+    "audit_ref": "https://github.com/code-423n4/2023-09-centrifuge-findings/issues/143#issuecomment-1745028559",
+    "annotations": "annotations/50.txt"
   }
 }
