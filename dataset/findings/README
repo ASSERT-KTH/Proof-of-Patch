@@ -1,0 +1,39 @@
+## Dataset config notes
+
+### 
+
+### 4
+has 3 submodules
+for accounts-v2/ one needs to add the submodule init recursive and then
+update their foundry.toml file and comment line 10 on --no-match-path.
+confirm correct setup by running
+forge test --match-test testGas_CreateAccount
+
+
+also do forge install, forge build before that happens
+
+and check installation with 
+forge test --match-path test/fuzz/LendingPool/TotalLiquidity.fuzz.t.sol 
+
+
+### 15 
+must be worked from vault/
+
+
+#### 46
+
+Needs to set up MAINNET_RPC_URL in .env file and missing foundry.toml file
+
+
+#### 49
+
+Add on foundry.toml
+test= 'src/tests'
+
+
+### 54
+
+cd contracts && npm install &&  forge test --summary
+
+
+
