@@ -54,7 +54,7 @@
 	url = https://github.com/code-423n4/2022-06-putty.git
 [submodule "dataset/findings/066/2023-11-kelp"]
 	path = dataset/findings/066/2023-11-kelp
-	url = https://github.com/code-423n4/2023-11-kelp
+	url = https://github.com/code-423n4/2023-11-kelp.git
 [submodule "dataset/findings/070/2024-08-ph"]
 	path = dataset/findings/070/2024-08-ph
 	url = https://github.com/code-423n4/2024-08-phi.git
