@@ -125,12 +125,12 @@ dataset/
 │   ├── 001/                 # Individual finding directories
 │   ├── 003/
 │   └── ...
-├── annotations/             # Manual annotations and summaries
+├── annotations/             # Security Researcher annotations and summaries
 │   ├── 001.txt
 │   ├── 003.txt
 │   └── ...
 ├── patches/                 # Implemented patches
-├── pocs/                    # Proof of concept exploits
+├── pocs/                    # Proof of concept exploits obtained from original finding
 └── dataset_metadata.json    # Curated dataset metadata
 ```
 
@@ -163,6 +163,9 @@ The curated dataset is ready to use immediately:
 # Clone repository
 git clone https://github.com/sofiabobadilla/Proof-of-Patch.git
 cd proof-of-patch
+
+# Execute the automated configuration file
+./dataset_config.sh --help
 
 # Explore curated findings
 ls dataset/findings/
@@ -231,7 +234,6 @@ python parser.py
 - **Automated Tools**: Develop security analysis tools
 
 ### **Curated Dataset Applications**
-- **Educational Resources**: Learn from carefully verified, high-quality examples
 - **Case Studies**: Deep dive into specific vulnerability patterns
 - **Research Benchmarks**: Use as ground truth for security research
 - **Developer Training**: Understand real-world vulnerability fixes
@@ -269,10 +271,6 @@ python parser.py
 - **Enhancement**: AI analysis using GPT-4o
 - **Validation**: Manual quality assessment
 
-### **File Formats**
-- **JSON**: Structured data with full metadata
-- **CSV**: Tabular format for analysis
-- **Logs**: Detailed processing information
 
 ## ⚠️ Important Notes
 
