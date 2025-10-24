@@ -166,7 +166,7 @@
     "finding_id":  "041",
     "code_repo": "https://github.com/sherlock-audit/2024-03-axis-finance.git",
     "repo_name": "2024-03-axis-finance",
-    "main_contract": "src/bases/Auctioneer.sol",
+    "main_contract": "moonraker/src/bases/Auctioneer.sol",
     "target_directory": "dataset/findings/041/2024-03-axis-finance",
     "patch": "patches/041",
     "patch_ref": "from_audit",
@@ -192,7 +192,7 @@
     "expected_vulnerability": "access control",
     "difficulty": "medium",
     "annotations": "annotations/042.txt",
-    "test_fix_commands": "cd cap-contracts & forge test --list",
+    "test_fix_commands":  "cd cap-contracts && npm install && forge build",
     "poc_path": "pocs/042",
     "poc_ref": "https://solodit.cyfrin.io/issues/m-2-utilization-rate-multiplier-will-not-shift-if-oracle-is-consulted-frequently-sherlock-cap-git"
   },
@@ -302,6 +302,7 @@
     "added_timestamp": "2025-10-22T14:58:45.580748",
     "finding_link": "https://solodit.cyfrin.io/issues/h-02-protocol-mints-less-rseth-on-deposit-than-intended-code4rena-kelp-dao-kelp-dao-git",
     "expected_vulnerability": "unchecked external calls",
+    "test_fix_commands": "forge test --match-path test/invariants/CryticToFoundry.t.sol ",
     "difficulty": "high",
     "audit_ref": "https://code4rena.com/reports/2023-11-kelp",
     "annotations": "annotations/066.txt"
