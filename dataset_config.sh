@@ -186,7 +186,9 @@ setup_findings() {
                     print_status "Setting up finding 42 (2025-07-cap)..."
                     if [ -d "cap-contracts" ]; then
                         cd cap-contracts
-                        # No special setup needed
+                        if [ -f "package.json" ]; then
+                            npm install
+                        fi
                         cd ..
                     fi
                     ;;
@@ -217,9 +219,7 @@ EOF
                         cd Cooler
                         # Add test configuration to foundry.toml
                         if [ -f "foundry.toml" ]; then
-                            if ! grep -q "test = 'src/tests'" foundry.toml; then
-                                echo "test = 'src/tests'" >> foundry.toml
-                            fi
+                            sed -i "/libs = \['lib'\]/a test = 'src/tests'" foundry.toml
                         fi
                         cd ..
                     fi
