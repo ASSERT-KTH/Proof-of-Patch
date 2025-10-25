@@ -1,69 +1,69 @@
-[submodule "dataset/findings/001/2024-06-size"]
-	path = dataset/findings/001/2024-06-size
+[submodule "findings/001/2024-06-size"]
+	path = findings/001/2024-06-size
 	url = https://github.com/code-423n4/2024-06-size.git
-[submodule "dataset/findings/003/2023-07-pooltogether"]
-	path = dataset/findings/003/2023-07-pooltogether
+[submodule "findings/003/2023-07-pooltogether"]
+	path = findings/003/2023-07-pooltogether
 	url = https://github.com/code-423n4/2023-07-pooltogether.git
-[submodule "dataset/findings/008/2023-09-centrifuge"]
-	path = dataset/findings/008/2023-09-centrifuge
+[submodule "findings/008/2023-09-centrifuge"]
+	path = findings/008/2023-09-centrifuge
 	url = https://github.com/code-423n4/2023-09-centrifuge.git
-[submodule "dataset/findings/009/2023-04-caviar"]
-	path = dataset/findings/009/2023-04-caviar
+[submodule "findings/009/2023-04-caviar"]
+	path = findings/009/2023-04-caviar
 	url = https://github.com/code-423n4/2023-04-caviar.git
-[submodule "dataset/findings/015/2023-07-pooltogether"]
-	path = dataset/findings/015/2023-07-pooltogether
+[submodule "findings/015/2023-07-pooltogether"]
+	path = findings/015/2023-07-pooltogether
 	url = https://github.com/code-423n4/2023-07-pooltogether.git
-[submodule "dataset/findings/018/2023-04-caviar"]
-	path = dataset/findings/018/2023-04-caviar
+[submodule "findings/018/2023-04-caviar"]
+	path = findings/018/2023-04-caviar
 	url = https://github.com/code-423n4/2023-04-caviar.git
-[submodule "dataset/findings/020/2023-12-dodo-gsp"]
-	path = dataset/findings/020/2023-12-dodo-gsp
+[submodule "findings/020/2023-12-dodo-gsp"]
+	path = findings/020/2023-12-dodo-gsp
 	url = https://github.com/sherlock-audit/2023-12-dodo-gsp.git
-[submodule "dataset/findings/032/2022-06-putty"]
-	path = dataset/findings/032/2022-06-putty
+[submodule "findings/032/2022-06-putty"]
+	path = findings/032/2022-06-putty
 	url = https://github.com/code-423n4/2022-06-putty.git
-[submodule "dataset/findings/033/2023-04-caviar"]
-	path = dataset/findings/033/2023-04-caviar
+[submodule "findings/033/2023-04-caviar"]
+	path = findings/033/2023-04-caviar
 	url = https://github.com/code-423n4/2023-04-caviar.git
-[submodule "dataset/findings/039/2024-03-axis-finance"]
-	path = dataset/findings/039/2024-03-axis-finance
+[submodule "findings/039/2024-03-axis-finance"]
+	path = findings/039/2024-03-axis-finance
 	url = https://github.com/sherlock-audit/2024-03-axis-finance.git
-[submodule "dataset/findings/041/2024-03-axis-finance"]
-	path = dataset/findings/041/2024-03-axis-finance
+[submodule "findings/041/2024-03-axis-finance"]
+	path = findings/041/2024-03-axis-finance
 	url = https://github.com/sherlock-audit/2024-03-axis-finance.git
-[submodule "dataset/findings/042/2025-07-cap"]
-	path = dataset/findings/042/2025-07-cap
+[submodule "findings/042/2025-07-cap"]
+	path = findings/042/2025-07-cap
 	url = https://github.com/sherlock-audit/2025-07-cap.git
-[submodule "dataset/findings/046/2023-05-xeth"]
-	path = dataset/findings/046/2023-05-xeth
+[submodule "findings/046/2023-05-xeth"]
+	path = findings/046/2023-05-xeth
 	url = https://github.com/code-423n4/2023-05-xeth.git
-[submodule "dataset/findings/048/2023-04-caviar"]
-	path = dataset/findings/048/2023-04-caviar
+[submodule "findings/048/2023-04-caviar"]
+	path = findings/048/2023-04-caviar
 	url = https://github.com/code-423n4/2023-04-caviar.git
-[submodule "dataset/findings/049/2023-08-cooler"]
-	path = dataset/findings/049/2023-08-cooler
+[submodule "findings/049/2023-08-cooler"]
+	path = findings/049/2023-08-cooler
 	url = https://github.com/sherlock-audit/2023-08-cooler.git
-[submodule "dataset/findings/051/2023-09-centrifuge"]
-	path = dataset/findings/051/2023-09-centrifuge
+[submodule "findings/051/2023-09-centrifuge"]
+	path = findings/051/2023-09-centrifuge
 	url = https://github.com/code-423n4/2023-09-centrifuge.git
-[submodule "dataset/findings/054/2022-05-cally"]
-	path = dataset/findings/054/2022-05-cally
+[submodule "findings/054/2022-05-cally"]
+	path = findings/054/2022-05-cally
 	url = https://github.com/code-423n4/2022-05-cally.git
-[submodule "dataset/findings/058/2022-06-putty"]
-	path = dataset/findings/058/2022-06-putty
+[submodule "findings/058/2022-06-putty"]
+	path = findings/058/2022-06-putty
 	url = https://github.com/code-423n4/2022-06-putty.git
-[submodule "dataset/findings/066/2023-11-kelp"]
-	path = dataset/findings/066/2023-11-kelp
+[submodule "findings/066/2023-11-kelp"]
+	path = findings/066/2023-11-kelp
 	url = https://github.com/code-423n4/2023-11-kelp.git
-[submodule "dataset/findings/070/2024-08-ph"]
-	path = dataset/findings/070/2024-08-ph
+[submodule "findings/070/2024-08-ph"]
+	path = findings/070/2024-08-ph
 	url = https://github.com/code-423n4/2024-08-phi.git
-[submodule "dataset/findings/077/2024-02-ai-arena"]
-	path = dataset/findings/077/2024-02-ai-arena
+[submodule "findings/077/2024-02-ai-arena"]
+	path = findings/077/2024-02-ai-arena
 	url = https://github.com/code-423n4/2024-02-ai-arena.git
-[submodule "dataset/findings/091/2023-07-basin"]
-	path = dataset/findings/091/2023-07-basin
+[submodule "findings/091/2023-07-basin"]
+	path = findings/091/2023-07-basin
 	url = https://github.com/code-423n4/2023-07-basin.git
-[submodule "dataset/findings/098/2022-05-cally"]
-	path = dataset/findings/098/2022-05-cally
+[submodule "findings/098/2022-05-cally"]
+	path = findings/098/2022-05-cally
 	url = https://github.com/code-423n4/2022-05-cally.git
