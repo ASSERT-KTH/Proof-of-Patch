@@ -12,7 +12,11 @@
     "difficulty": "Medium",
     "patch": "dataset/patches/001/",
     "patch_ref": "https://github.com/SizeCredit/size-solidity/pull/126",
-    "test_fix_commands": "forge test --match-path test/local/actions/Multicall.t.sol"
+    "test_fix_commands": "forge test --match-path test/local/actions/Multicall.t.sol",
+    "audit_ref": null,
+    "poc_path": null,
+    "poc_ref": null,
+    "added_timestamp": null
   },
   "003": {
     "finding_id":  "003",
@@ -25,7 +29,13 @@
     "patch": "patches/003",
     "patch_ref": "https://github.com/GenerationSoftware/pt-v5-vault/pull/7/files",
     "annotations": "annotations/003.txt",
-    "expected_vulnerability": "access control"
+    "expected_vulnerability": "access control",
+    "main_contract": null,
+    "finding_link": null,
+    "audit_ref": null,
+    "poc_path": null,
+    "poc_ref": null,
+    "added_timestamp": null
   },
   "008": {
     "finding_id":  "008",
@@ -43,7 +53,8 @@
     "audit_ref": "https://solodit.cyfrin.io/issues/m-05-investors-claiming-their-maxdeposit-by-using-the-liquiditypooldeposit-will-cause-other-users-to-be-unable-to-claim-their-maxdepositmaxmint-code4rena-centrifuge-centrifuge-git",
     "annotations": "annotations/008.txt",
     "poc_path": "pocs/008",
-    "poc_ref": "https://solodit.cyfrin.io/issues/m-05-investors-claiming-their-maxdeposit-by-using-the-liquiditypooldeposit-will-cause-other-users-to-be-unable-to-claim-their-maxdepositmaxmint-code4rena-centrifuge-centrifuge-git"
+    "poc_ref": "https://solodit.cyfrin.io/issues/m-05-investors-claiming-their-maxdeposit-by-using-the-liquiditypooldeposit-will-cause-other-users-to-be-unable-to-claim-their-maxdepositmaxmint-code4rena-centrifuge-centrifuge-git",
+    "test_fix_commands": null
   },
   "009": {
     "finding_id":  "009",
@@ -59,7 +70,10 @@
     "difficulty": "medium",
     "audit_ref": "https://solodit.cyfrin.io/issues/m-08-loss-of-funds-for-traders-due-to-accounting-error-in-royalty-calculations-code4rena-caviar-caviar-private-pools-git",
     "annotations": "annotations/009.txt",
-    "test_fix_commands": "forge test --match-path test/PrivatePool/Withdraw.t.sol"
+    "test_fix_commands": "forge test --match-path test/PrivatePool/Withdraw.t.sol",
+    "project_path": null,
+    "poc_path": null,
+    "poc_ref": null
   },
   "015": {
     "finding_id":  "015",
@@ -77,7 +91,8 @@
     "annotations": "annotations/015.txt",
     "test_fix_commands": "cd vault & forge test",
     "poc_path": "pocs/015",
-    "poc_ref": "https://solodit.cyfrin.io/issues/m-02-unintended-or-malicious-use-of-prize-winners-hooks-code4rena-pooltogether-pooltogether-git"
+    "poc_ref": "https://solodit.cyfrin.io/issues/m-02-unintended-or-malicious-use-of-prize-winners-hooks-code4rena-pooltogether-pooltogether-git",
+    "project_path": null
   },
   "018": {
     "finding_id":  "018",
@@ -94,7 +109,9 @@
     "annotations": "annotations/018.txt",
     "test_fix_commands": "forge test --match-path test/PrivatePool/Buy.t.sol --ffi --gas-report",
     "poc_path": "pocs/018",
-    "poc_ref": "https://github.com/code-423n4/2023-04-caviar-findings/0issues/230"
+    "poc_ref": "https://github.com/code-423n4/2023-04-caviar-findings/0issues/230",
+    "project_path": null,
+    "audit_ref": null
   },
   "020": {
     "finding_id":  "020",
@@ -111,7 +128,9 @@
     "annotations": "annotations/020.txt",
     "test_fix_commands": "cd dodo-gassaving-pool & npm install & forge compile",
     "poc_path": "pocs/020",
-    "poc_ref": "https://solodit.cyfrin.io/issues/m-3-share-price-inflation-by-first-lp-er-enabling-dos-attacks-on-subsequent-buyshares-with-up-to-1001x-the-attacking-cost-sherlock-dodo-gsp-git"
+    "poc_ref": "https://solodit.cyfrin.io/issues/m-3-share-price-inflation-by-first-lp-er-enabling-dos-attacks-on-subsequent-buyshares-with-up-to-1001x-the-attacking-cost-sherlock-dodo-gsp-git",
+    "project_path": null,
+    "audit_ref": null
   },
   "032": {
     "finding_id":  "032",
@@ -127,7 +146,10 @@
     "difficulty": "medium",
     "audit_ref": "https://solodit.cyfrin.io/issues/m-06-denial-of-service-contract-owner-could-block-users-from-withdrawing-their-strike-code4rena-putty-putty-contest-git",
     "annotations": "annotations/032.txt",
-    "test_fix_commands": "cd contracts & forge test --list"
+    "test_fix_commands": "cd contracts & forge test --list",
+    "project_path": null,
+    "poc_path": null,
+    "poc_ref": null
   },
   "033": {
     "finding_id":  "033",
@@ -144,7 +166,9 @@
     "annotations": "annotations/033.txt",
     "test_fix_commands": "forge test --match-test test_EmitsWithdrawEvent",
     "poc_path": "pocs/033",
-    "poc_ref": "https://gist.github.com/romeroadrian/06238839330315780b90d9202042ea0f"
+    "poc_ref": "https://gist.github.com/romeroadrian/06238839330315780b90d9202042ea0f",
+    "project_path": null,
+    "audit_ref": null
   },
   "039": {
     "finding_id":  "039",
@@ -160,7 +184,10 @@
     "difficulty": "High",
     "audit_ref": "https://github.com/sherlock-audit/2024-03-axis-finance-judging",
     "annotations": "annotations/039.txt",
-    "test_fix_commands": "cd moonraker & forge test --match-test test_approval_notOwner_reverts"
+    "test_fix_commands": "cd moonraker & forge test --match-test test_approval_notOwner_reverts",
+    "project_path": null,
+    "poc_path": null,
+    "poc_ref": null
   },
   "041": {
     "finding_id":  "041",
@@ -177,7 +204,9 @@
     "annotations": "annotations/041.txt",
     "test_fix_commands": "cd moonraker & forge test --list",
     "poc_path": "pocs/041",
-    "poc_ref": "https://solodit.cyfrin.io/issues/h-1-malicious-user-can-overtake-a-prefunded-auction-and-steal-the-deposited-funds-sherlock-axis-finance-git"
+    "poc_ref": "https://solodit.cyfrin.io/issues/h-1-malicious-user-can-overtake-a-prefunded-auction-and-steal-the-deposited-funds-sherlock-axis-finance-git",
+    "project_path": null,
+    "audit_ref": null
   },
   "042": {
     "finding_id":  "042",
@@ -194,7 +223,9 @@
     "annotations": "annotations/042.txt",
     "test_fix_commands":  "cd cap-contracts && npm install && forge build",
     "poc_path": "pocs/042",
-    "poc_ref": "https://solodit.cyfrin.io/issues/m-2-utilization-rate-multiplier-will-not-shift-if-oracle-is-consulted-frequently-sherlock-cap-git"
+    "poc_ref": "https://solodit.cyfrin.io/issues/m-2-utilization-rate-multiplier-will-not-shift-if-oracle-is-consulted-frequently-sherlock-cap-git",
+    "project_path": null,
+    "audit_ref": null
   },
   "046": {
     "finding_id":  "046",
@@ -211,7 +242,9 @@
     "annotations": "annotations/046.txt",
     "test_fix_commands": "declare MAINNET_RPC_URL",
     "poc_path": "pocs/046",
-    "poc_ref": "https://gist.githubusercontent.com/romeroadrian/475d1f809301c5a0ccf2e6e9bec85472/raw/fc0ab8392815cb3d43d4341a3330c03360c78ca4/2023-05-xeth-Audit.t.sol"
+    "poc_ref": "https://gist.githubusercontent.com/romeroadrian/475d1f809301c5a0ccf2e6e9bec85472/raw/fc0ab8392815cb3d43d4341a3330c03360c78ca4/2023-05-xeth-Audit.t.sol",
+    "project_path": null,
+    "audit_ref": null
   },
   "048": {
     "finding_id":  "048",
@@ -227,7 +260,10 @@
     "annotations": "annotations/048.txt",
     "test_fix_commands": "forge test --list",
     "poc_path": "pocs/048",
-    "poc_ref": "https://github.com/code-423n4/2023-04-caviar-findings/0issues/320"
+    "poc_ref": "https://github.com/code-423n4/2023-04-caviar-findings/0issues/320",
+    "project_path": null,
+    "finding_link": null,
+    "audit_ref": null
   },
   "049": {
     "finding_id":  "049",
@@ -242,7 +278,11 @@
     "expected_vulnerability": "access control",
     "difficulty": "medium",
     "audit_ref": "https://github.com/sherlock-audit/2023-08-cooler-judging/issues/26",
-    "annotations": "annotations/049.txt"
+    "annotations": "annotations/049.txt",
+    "project_path": null,
+    "test_fix_commands": null,
+    "poc_path": null,
+    "poc_ref": null
   },
   "051": {
     "finding_id":  "051",
@@ -257,7 +297,11 @@
     "expected_vulnerability": "access control",
     "difficulty": "medium",
     "audit_ref": "https://github.com/code-423n4/2023-09-centrifuge-findings/0issues/143#issuecomment-1745028559",
-    "annotations": "annotations/050.txt"
+    "annotations": "annotations/050.txt",
+    "project_path": null,
+    "test_fix_commands": null,
+    "poc_path": null,
+    "poc_ref": null
   },
   "054": {
     "finding_id":  "054",
@@ -273,7 +317,10 @@
     "difficulty": "High",
     "audit_ref": "https://solodit.cyfrin.io/issues/h-01-no-revert-on-transfer-erc20-tokens-can-be-drained-code4rena-cally-cally-contest-git",
     "annotations": "annotations/054.txt",
-    "test_fix_commands": "npm install && cd contracts && forge test --summary"
+    "test_fix_commands": "npm install && cd contracts && forge test --summary",
+    "project_path": null,
+    "poc_path": null,
+    "poc_ref": null
   },
   "058": {
     "finding_id":  "058",
@@ -289,7 +336,10 @@
     "difficulty": "medium",
     "audit_ref": "https://github.com/code-423n4/2022-06-putty-findings/0issues/226#issuecomment-1174516212",
     "annotations": "annotations/058.txt",
-    "test_fix_commands": "cd contracts && npm install && forge test --list"
+    "test_fix_commands": "cd contracts && npm install && forge test --list",
+    "project_path": null,
+    "poc_path": null,
+    "poc_ref": null
   },
   "066": {
     "finding_id":  "066",
@@ -305,7 +355,10 @@
     "test_fix_commands": "forge test --match-path test/invariants/CryticToFoundry.t.sol ",
     "difficulty": "high",
     "audit_ref": "https://code4rena.com/reports/2023-11-kelp",
-    "annotations": "annotations/066.txt"
+    "annotations": "annotations/066.txt",
+    "project_path": null,
+    "poc_path": null,
+    "poc_ref": null
   },
   "070": {
     "finding_id":  "070",
@@ -323,7 +376,8 @@
     "annotations": "annotations/070.txt",
     "test_fix_commands": "npm install",
     "poc_path": "pocs/070",
-    "poc_ref": "https://solodit.cyfrin.io/issues/m-01-contract-phinft1155-cant-be-paused-code4rena-phi-phi-git"
+    "poc_ref": "https://solodit.cyfrin.io/issues/m-01-contract-phinft1155-cant-be-paused-code4rena-phi-phi-git",
+    "project_path": null
   },
   "077": {
     "finding_id":  "077",
@@ -341,7 +395,8 @@
     "annotations": "annotations/077.txt",
     "test_fix_commands": "forge build && forge test",
     "poc_path": "pocs/077",
-    "poc_ref": "https://github.com/code-423n4/2024-02-ai-arena-findings/0issues/37#issuecomment-1975461186"
+    "poc_ref": "https://github.com/code-423n4/2024-02-ai-arena-findings/0issues/37#issuecomment-1975461186",
+    "project_path": null
   },
   "091": {
     "finding_id":  "091",
@@ -359,7 +414,8 @@
     "test_fix_commands": "forge build",
     "poc_path": "pocs/091",
     "poc_ref": "https://github.com/code-423n4/2023-07-basin-findings/0issues/136#issuecomment-1689106144",
-    "expected_vulnerability": "price oracle manipulation"
+    "expected_vulnerability": "price oracle manipulation",
+    "project_path": null
   },
   "098": {
     "finding_id":  "098",
@@ -375,6 +431,9 @@
     "difficulty": "high",
     "audit_ref": "https://code4rena.com/contests/2022-05-cally-contest",
     "annotations": "annotations/098.txt",
-    "test_fix_commands": "cd contracts && npm install && forge build"
+    "test_fix_commands": "cd contracts && npm install && forge build",
+    "project_path": null,
+    "poc_path": null,
+    "poc_ref": null
   }
 }
