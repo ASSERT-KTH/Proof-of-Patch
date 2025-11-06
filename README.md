@@ -1,6 +1,6 @@
 # Proof-of-Patch Dataset
 
-**A curated dataset of smart contract security audits with patch/mitigation indicators from Solodit**
+**A curated dataset of smart contract vulnerability reports with patch/mitigation indicators from Solodit**
 
 Dataset used for the evaluation of PoCo (see [PoCo: Agentic Proof-of-Concept Exploit Generation for Smart Contracts](https://arxiv.org/abs/2511.02780)).
 
