@@ -2,11 +2,7 @@
 
 **A curated dataset of smart contract security audits with patch/mitigation indicators from Solodit**
 
-## ⚠️ YOU ARE ON THE "only-dataset" BRANCH
-This branch is not compatible with main as it is mean to execute the evaluation of PoCo (see [PoCo: Agentic Proof-of-Concept Exploit Generation for Smart Contracts](https://arxiv.org/abs/2511.02780)).
-
-Therefore, the scrapping info and POCs are removed from the data. For full dataset reproduction, see [main branch](https://github.com/ASSERT-KTH/Proof-of-Patch/).
-
+Dataset used for the evaluation of PoCo (see [PoCo: Agentic Proof-of-Concept Exploit Generation for Smart Contracts](https://arxiv.org/abs/2511.02780)).
 
 ## 📋 Curated Findings Table
 
@@ -119,7 +115,8 @@ This dataset is provided for research purposes. When using this data, please cit
       url={https://arxiv.org/abs/2511.02780}, 
 }
 ```
-
+## ⚠️ YOU ARE ON THE "only-dataset" BRANCH
+Therefore, the scraping info and POCs are removed from the data. **For full dataset reproduction**, see [main branch](https://github.com/ASSERT-KTH/Proof-of-Patch/tree/main).
 
 
 
