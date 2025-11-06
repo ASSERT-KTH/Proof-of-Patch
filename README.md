@@ -110,7 +110,7 @@ This dataset is provided for research purposes. When using this data, please cit
 
 ```
 @misc{andersson20251pocoagenticproofofconcept,
-      title={1 PoCo: Agentic Proof-of-Concept Exploit Generation for Smart Contracts}, 
+      title={PoCo: Agentic Proof-of-Concept Exploit Generation for Smart Contracts}, 
       author={Vivi Andersson and Sofia Bobadilla and Harald Hobbelhagen and Martin Monperrus},
       year={2025},
       eprint={2511.02780},
