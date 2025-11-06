@@ -2,88 +2,49 @@
 
 **A curated dataset of smart contract security audits with patch/mitigation indicators from Solodit**
 
-## 🎯 Overview
+## ⚠️ YOU ARE ON THE "only-dataset" BRANCH
+This branch is not compatible with main as it is mean to execute the evaluation of PoCo (see [PoCo: Agentic Proof-of-Concept Exploit Generation for Smart Contracts](https://arxiv.org/abs/2511.02780)).
 
-This repository contains two distinct datasets:
+Therefore, the scrapping info and POCs are removed from the data. For full dataset reproduction, see [main branch](https://github.com/ASSERT-KTH/Proof-of-Patch/).
 
-1. **Raw Dataset** (`raw_dataset/`): Contains links and data scraped directly from [Solodit](https://solodit.cyfrin.io/), including 3,814+ audit findings with patch indicators, GitHub commits, pull requests, and mitigation strategies.
-
-2. **Curated Dataset** (`dataset/`): A manually verified collection of the **100 most promising audits** from the raw dataset, carefully reviewed for their research value, patch quality, and educational potential.
-
-The dataset is built using enhanced scraping and AI analysis tools adapted from the [VeriSet](https://github.com/ASSERT-KTH/VeriSet) project, specifically modified to prioritize audits with patch/mitigation content.
-
-## 📊 Dataset Statistics
-
-### **Raw Dataset**
-- **Total Audits**: 3,814+ audits with patch indicators
-- **Source**: Scraped from Solodit with AI analysis
-- **Patch Indicators**: Audits with GitHub commits, PRs, or mitigation code
-- **Quality Metrics**: AI-analyzed for PoC presence, mitigation quality, and technical soundness
-
-### **Curated Dataset**
-- **Total Findings**: 23 manually verified findings
-- **Verification Process**: Most promising audits reviewed for research and education value
-- **Manual Review**: Each finding includes detailed annotations and summaries
-- **Patch References**: Direct links to implemented fixes
-
-### **Vulnerability Category Breakdown**
-
-| Category | Audits Found | Audits Added | Success Rate |
-|----------|-------------|--------------|--------------|
-| **Access Control** | 1,326 | 1,043 | 78.7% |
-| **Reentrancy** | 1,083 | 760 | 70.2% |
-| **Logic Error** | 940 | 770 | 81.9% |
-| **Flash Loan** | 460 | 356 | 77.4% |
-| **Denial of Service (DoS)** | 375 | 309 | 82.4% |
-| **Lack of Input Validation** | 364 | 276 | 75.8% |
-| **Price Oracle Manipulation** | 297 | 230 | 77.4% |
-| **Unchecked External Calls** | 301 | 250 | 83.1% |
-| **Integer Overflow** | 222 | 175 | 78.8% |
-| **Integer Underflow** | 99 | 79 | 79.8% |
-| **Insecure Randomness** | 13 | 8 | 61.5% |
-
-**Total**: 5,480 audits found → 3,814 audits added (69.6% overall success rate)
-
-*Data collected on October 3-4, 2025*
-
-STARTING TIMESTAMP: 2025-10-03 15:30:55,954
-FINISHED AT:        2025-10-04 07:38:23,078
 
 ## 📋 Curated Findings Table
 
 The following table presents the 23 most promising findings from our curated dataset, each manually verified and reviewed for their research value and educational potential.
 
-| ID | Repository | Vulnerability Type | Difficulty | Has PoC | Summary |
-|----|------------|-------------------|------------|---------|---------|
-| 001 | [2024-06-size](https://github.com/code-423n4/2024-06-size) | Access Control | Medium | No | Multicall function bypasses deposit limits, allowing users to deposit more borrowATokens than intended, breaking the invariant that restricts borrowAToken supply increase to be less than or equal to debtToken supply decrease. |
-| 003 | [2023-07-pooltogether](https://github.com/code-423n4/2023-07-pooltogether) | Access Control | High | No | Vault.mintYieldFee function lacks access control, allowing anyone to steal available yield fees by minting shares to any address instead of using the designated yield fee recipient. |
-| 008 | [2023-09-centrifuge](https://github.com/code-423n4/2023-09-centrifuge) | Logic Error | Medium | Yes | Investors claiming deposits using LiquidityPool.deposit() cause rounding errors that result in the Escrow contract transferring slightly more shares than intended, preventing other investors from claiming their entitled shares. |
-| 009 | [2023-04-caviar](https://github.com/code-423n4/2023-04-caviar) | Logic Error | Medium | No | Accounting error in royalty calculations causes loss of funds for traders due to incorrect fee computation in the PrivatePool contract. |
-| 015 | [2023-07-pooltogether](https://github.com/code-423n4/2023-07-pooltogether) | Denial of Service | High | Yes | setHooks function allows users to set arbitrary hooks, potentially enabling unauthorized side transactions, reentrant calls, or denial-of-service attacks on claiming transactions. |
-| 018 | [2023-04-caviar](https://github.com/code-423n4/2023-04-caviar) | Flash Loan | High | Yes | PrivatePool tokens can be stolen by previous owners via execute and flashLoan functions, as ownership changes don't revoke previous approvals, allowing attackers to drain funds after selling pool ownership. |
-| 020 | [2023-12-dodo-gsp](https://github.com/sherlock-audit/2023-12-dodo-gsp) | Denial of Service | Medium | Yes | First liquidity provider can inflate share prices by depositing minimal amounts, enabling DoS attacks on subsequent buyShares with up to 1001x the attacking cost. |
-| 032 | [2022-06-putty](https://github.com/code-423n4/2022-06-putty) | Logic Error | Medium | No | Contract owner can block users from withdrawing their strike by manipulating the withdrawal mechanism, causing denial of service for legitimate users. |
-| 033 | [2023-04-caviar](https://github.com/code-423n4/2023-04-caviar) | Logic Error | Medium | Yes | Flash loan fee calculation is incorrect in the PrivatePool contract, leading to improper fee collection and potential loss of protocol revenue. |
-| 039 | [2024-03-axis-finance](https://github.com/sherlock-audit/2024-03-axis-finance) | Unchecked External Calls | High | No | Auction house routing details are recorded at index 0, allowing attackers to create auctions right after honest users and take over their prefunded auctions to steal funds. |
-| 041 | [2024-03-axis-finance](https://github.com/sherlock-audit/2024-03-axis-finance) | Reentrancy | High | Yes | Malicious users can overtake prefunded auctions and steal deposited funds by exploiting the auction creation mechanism and routing storage. |
-| 042 | [2025-07-cap](https://github.com/sherlock-audit/2025-07-cap) | Access Control | Medium | Yes | Utilization rate multiplier fails to shift when oracle is consulted frequently, leading to incorrect interest rate calculations and potential economic exploitation. |
-| 046 | [2023-05-xeth](https://github.com/code-423n4/2023-05-xeth) | Denial of Service | Medium | Yes | Zero token transfers can cause potential DoS in CVXStaker contract due to improper handling of zero-value transfers in the staking mechanism. |
-| 048 | [2023-04-caviar](https://github.com/code-423n4/2023-04-caviar) | Reentrancy | High | Yes | Reentrancy vulnerability in PrivatePool contract allows attackers to manipulate state during external calls, potentially draining funds or causing unexpected behavior. |
-| 049 | [2023-08-cooler](https://github.com/sherlock-audit/2023-08-cooler) | Access Control | Medium | No | Lender can steal borrower's collateral by calling rollLoan with unfavorable terms on behalf of the borrower, exploiting insufficient access controls. |
-| 051 | [2023-09-centrifuge](https://github.com/code-423n4/2023-09-centrifuge) | Access Control | Medium | No | Users can deposit really small amounts for other users to DoS them, preventing legitimate users from claiming their deposits due to malicious micro-deposits. |
-| 054 | [2022-05-cally](https://github.com/code-423n4/2022-05-cally) | Reentrancy | High | No | No revert on transfer of ERC20 tokens can lead to token drainage due to improper handling of failed token transfers in the contract logic. |
-| 058 | [2022-06-putty](https://github.com/code-423n4/2022-06-putty) | Logic Error | Medium | No | fillOrder and exercise functions may lock ether sent to the contract forever due to improper handling of ETH transfers and order fulfillment logic. |
-| 066 | [2023-11-kelp](https://github.com/code-423n4/2023-11-kelp) | Unchecked External Calls | High | No | Protocol mints less rsETH on deposit than intended due to unchecked external calls and improper calculation of minted tokens in the deposit process. |
-| 070 | [2024-08-phi](https://github.com/code-423n4/2024-08-phi) | Reentrancy | Medium | Yes | Contract PhiNFT1155 cannot be paused due to reentrancy vulnerabilities that prevent proper emergency pause functionality. |
-| 077 | [2024-02-ai-arena](https://github.com/code-423n4/2024-02-ai-arena) | Reentrancy | High | Yes | Players can mint more fighter NFTs during claim of rewards by leveraging reentrancy on the claimRewards function, allowing unlimited NFT minting. |
-| 091 | [2023-07-basin](https://github.com/code-423n4/2023-07-basin) | Price Oracle Manipulation | High | Yes | Pumps (oracles) are not updated in shift() and sync() functions, allowing users to manipulate reserves in the current block and override previous block's reserves for oracle manipulation. |
-| 098 | [2022-05-cally](https://github.com/code-423n4/2022-05-cally) | Reentrancy | High | No | Fake balances can be created for not-yet-existing ERC20 tokens, allowing attackers to set traps to steal funds from future users through reentrancy exploitation. |
+| ID | Project | Description | Audit Ref. | Patch Ref. | Has PoC |
+|----|---------|-------------|------------|------------|---------|
+| [001](https://solodit.cyfrin.io/issues/m-01-multicall-does-not-work-as-intended-code4rena-size-size-git) | [2024-06-size](https://github.com/code-423n4/2024-06-size) | Logical error in multicall function allows users to bypass deposit limits. | [M-01](https://github.com/code-423n4/2024-06-size-findings/issues/238) | [PR126](https://github.com/SizeCredit/size-solidity/pull/126) | No |
+| [003](https://solodit.cyfrin.io/issues/h-04-vaultmintyieldfee-function-can-be-called-by-anyone-to-mint-vault-shares-to-any-recipient-address-code4rena-pooltogether-pooltogether-git) | [2023-07-pooltogether](https://github.com/code-423n4/2023-07-pooltogether) | User can mint shares to any address and steal the yield fee of the protocol. | [H-04](https://github.com/code-423n4/2023-07-pooltogether-findings/issues/396) | [PR7](https://github.com/GenerationSoftware/pt-v5-vault/pull/7) | No |
+| [008](https://solodit.cyfrin.io/issues/m-05-investors-claiming-their-maxdeposit-by-using-the-liquiditypooldeposit-will-cause-other-users-to-be-unable-to-claim-their-maxdepositmaxmint-code4rena-centrifuge-centrifuge-git) | [2023-09-centrifuge](https://github.com/code-423n4/2023-09-centrifuge) | Rounding errors in share calculations allow investors to receive excess shares. | [M-05](https://github.com/code-423n4/2023-09-centrifuge-findings/issues/118) | [PR166](https://github.com/centrifuge/liquidity-pools/pull/166) | Yes |
+| [009](https://solodit.cyfrin.io/issues/m-08-loss-of-funds-for-traders-due-to-accounting-error-in-royalty-calculations-code4rena-caviar-caviar-private-pools-git) | [2023-04-caviar](https://github.com/code-423n4/2023-04-caviar) | Royalties are miscalculated when recipient address is zero, leading to trapped funds. | [M-08](https://github.com/code-423n4/2023-04-caviar-findings/issues/596) | [PR11](https://github.com/outdoteth/caviar-private-pools/pull/11/files) | No |
+| [015](https://solodit.cyfrin.io/issues/m-02-unintended-or-malicious-use-of-prize-winners-hooks-code4rena-pooltogether-pooltogether-git) | [2023-07-pooltogether](https://github.com/code-423n4/2023-07-pooltogether) | The prize-winners hook mechanism can be exploited to interfere with the intended prize distribution process. | [M-02](https://github.com/code-423n4/2023-07-pooltogether-findings/issues/465) | [PR21](https://github.com/GenerationSoftware/pt-v5-vault/pull/21) | Yes |
+| [018](https://solodit.cyfrin.io/issues/m-15-pool-tokens-can-be-stolen-via-privatepoolflashloan-function-from-previous-owner-code4rena-caviar-caviar-git) | [2023-04-caviar](https://github.com/code-423n4/2023-04-caviar) | Former owner can set token approvals that enable them to reclaim assets after ownership transfer. | [M-15](https://github.com/code-423n4/2023-04-caviar-findings/issues/230) | [PR2](https://github.com/outdoteth/caviar-private-pools/pull/2) | Yes |
+| [020](https://solodit.cyfrin.io/issues/m-3-share-price-inflation-by-first-lp-er-enabling-dos-attacks-on-subsequent-buyshares-with-up-to-1001x-the-attacking-cost-sherlock-dodo-gsp-git) | [2023-12-dodo-gsp](https://github.com/sherlock-audit/2023-12-dodo-gsp) | A first liquidity provider can inflate the share price during pool initialization, enabling a DoS. | [M-03](https://github.com/sherlock-audit/2023-12-dodo-gsp-judging/issues/55) | [PR14](https://github.com/DODOEX/dodo-gassaving-pool/pull/14/files) | Yes |
+| [032](https://solodit.cyfrin.io/issues/m-06-denial-of-service-contract-owner-could-block-users-from-withdrawing-their-strike-code4rena-putty-putty-contest-git) | [2022-06-putty](https://github.com/code-423n4/2022-06-putty) | User cannot withdraw their strike amount and their asset will be stuck in the contract. | [M-06](https://github.com/code-423n4/2022-06-putty-findings/issues/296#issuecomment-1185411399) | [PR4](https://github.com/outdoteth/putty-v2/pull/4/files) | No |
+| [033](https://solodit.cyfrin.io/issues/m-03-flash-loan-fee-is-incorrect-in-private-pool-contract-code4rena-caviar-caviar-private-pools-git) | [2023-04-caviar](https://github.com/code-423n4/2023-04-caviar) | The PrivatePool contract miscalculates flash loan fees causing incorrect fee totals. | [M-03](https://github.com/code-423n4/2023-04-caviar-findings/issues/864) | [PR6](https://github.com/outdoteth/caviar-private-pools/pull/6) | Yes |
+| [039](https://solodit.cyfrin.io/issues/h-2-m-1-sherlock-axis-finance-git) | [2024-03-axis-finance](https://github.com/sherlock-audit/2024-03-axis-finance) | Refund handling errors can lock seller funds when the token reverts on zero transfers. | [M-01](https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/21) | [PR142](https://github.com/Axis-Fi/axis-core/pull/142/files) | No |
+| [041](https://solodit.cyfrin.io/issues/h-1-malicious-user-can-overtake-a-prefunded-auction-and-steal-the-deposited-funds-sherlock-axis-finance-git) | [2024-03-axis-finance](https://github.com/sherlock-audit/2024-03-axis-finance) | User can hijack a prefunded auction and gain control over its deposited funds. | [H-01](https://github.com/sherlock-audit/2024-03-axis-finance-judging/issues/12) | [PR132](https://github.com/Axis-Fi/moonraker/pull/132) | Yes |
+| [042](https://solodit.cyfrin.io/issues/m-2-utilization-rate-multiplier-will-not-shift-if-oracle-is-consulted-frequently-sherlock-cap-git) | [2025-07-cap](https://github.com/sherlock-audit/2025-07-cap) | User can exploit a rounding error to repeatedly miscompute utilization, causing inaccurate interest rate adjustments. | [M-02](https://github.com/sherlock-audit/2025-07-cap-judging/issues/148) | [PR187](https://github.com/cap-labs-dev/cap-contracts/pull/187) | Yes |
+| [046](https://solodit.cyfrin.io/issues/m-03-zero-token-transfer-can-cause-a-potential-dos-in-cvxstaker-code4rena-xeth-xeth-versus-contest-git) | [2023-05-xeth](https://github.com/code-423n4/2023-05-xeth) | Zero token transfer can cause a potential denial of service when giving rewards | [M-03](https://github.com/code-423n4/2023-05-xeth-findings/issues/30) | [1f71a](https://github.com/code-423n4/2023-05-xeth/commit/1f714868f193cdeb472ec097110901a997d87ec4) | Yes |
+| [048](https://solodit.cyfrin.io/issues/h-01-royalty-receiver-can-drain-a-private-pool-code4rena-caviar-caviar-private-pools-git) | [2023-04-caviar](https://github.com/code-423n4/2023-04-caviar) | Malicious royalty recipient can extract value from the pool without proper payment. | [H-01](https://github.com/code-423n4/2023-04-caviar-findings/issues/593#issuecomment-1520075272) | [PR12](https://github.com/outdoteth/caviar-private-pools/pull/12) | Yes |
+| [049](https://solodit.cyfrin.io/issues/m-2-lender-is-able-to-steal-borrowers-collateral-by-calling-rollloan-with-unfavourable-terms-on-behalf-of-the-borrower-sherlock-cooler-update-git) | [2023-08-cooler](https://github.com/sherlock-audit/2023-08-cooler) | Lender can update loan terms without borrower approval, enabling them to impose unfair conditions. | [M-02](https://github.com/sherlock-audit/2023-08-cooler-judging/issues/26) | [PR54](https://github.com/ohmzeus/Cooler/pull/54/files#diff-f461174637e644b69004d9f7ad97d531a760909f465ad610acea335531a49767) | No |
+| [051](https://solodit.cyfrin.io/issues/m-04-you-can-deposit-really-small-amount-for-other-users-to-dos-them-code4rena-centrifuge-centrifuge-git) | [2023-09-centrifuge](https://github.com/code-423n4/2023-09-centrifuge) | Missed access control allows users to deposit on behalf of others and potentially caused a denial of service attack. | [M-04](https://github.com/code-423n4/2023-09-centrifuge-findings/issues/143) | [PR136](https://github.com/centrifuge/liquidity-pools/pull/136) | No |
+| [054](https://solodit.cyfrin.io/issues/h-01-no-revert-on-transfer-erc20-tokens-can-be-drained-code4rena-cally-cally-contest-git) | [2022-05-cally](https://github.com/code-423n4/2022-05-cally) | Unchecked token transfer return values let attackers create empty vaults, causing buyers to pay Ether but receive no tokens. | [H-01](https://github.com/code-423n4/2022-05-cally-findings/issues/89) | [PR4](https://github.com/outdoteth/cally/pull/4) | Yes |
+| [058](https://solodit.cyfrin.io/issues/m-05-fillorder-and-exercise-may-lock-ether-sent-to-the-contract-forever-code4rena-putty-putty-git) | [2022-06-putty](https://github.com/code-423n4/2022-06-putty) | Users can accidentally send Ether to code paths that don't use it, causing the funds to be locked | [M-05](https://github.com/code-423n4/2022-06-putty-findings/issues/226) | [PR5](https://github.com/outdoteth/putty-v2/pull/5) | No |
+| [066](https://solodit.cyfrin.io/issues/h-02-protocol-mints-less-rseth-on-deposit-than-intended-code4rena-kelp-dao-kelp-dao-git) | [2023-11-kelp](https://github.com/code-423n4/2023-11-kelp) | Users receive less rsETH than expected due to a miscalculation in the minting logic. | [H-02](https://github.com/code-423n4/2023-11-kelp-findings/issues/62) | [Other](https://github.com/code-423n4/2023-11-kelp-findings/issues/62#issuecomment-1850480282) | No |
+| [070](https://solodit.cyfrin.io/issues/m-01-contract-phinft1155-cant-be-paused-code4rena-phi-phi-git) | [2024-08-ph](https://github.com/code-423n4/2024-08-ph) | Users are able to transfer NFT tokens even when the contract is paused. | [M-01](https://github.com/code-423n4/2024-08-phi-findings/issues/268) | [Other](https://github.com/code-423n4/2024-08-phi-findings/issues/268#issuecomment-2357330877) | Yes |
+| [077](https://solodit.cyfrin.io/issues/h-08-player-can-mint-more-fighter-nfts-during-claim-of-rewards-by-leveraging-reentrancy-on-the-claimrewards-function-code4rena-ai-arena-ai-arena-git) | [2024-02-ai-arena](https://github.com/code-423n4/2024-02-ai-arena) | Players can exploit a reentrancy bug to claim extra rewards before the contract updates their NFT balance. | [H-08](https://github.com/code-423n4/2024-02-ai-arena-findings/issues/37) | [PR6](https://github.com/ArenaX-Labs/2024-02-ai-arena-mitigation/pull/6/files#diff-b7b791431bf00bf243ef885bca223669bc5c7970e24202017c3736b65c62ed1f) | Yes |
+| [091](https://solodit.cyfrin.io/issues/h-01-pumps-are-not-updated-in-the-shift-and-sync-functions-allowing-oracle-manipulation-code4rena-basin-basin-git) | [2023-07-basin](https://github.com/code-423n4/2023-07-basin) | Users can manipulate the reported asset reserves, causing incorrect price data. | [H-01](https://github.com/code-423n4/2023-07-basin-findings/issues/136) | [PR97](https://github.com/BeanstalkFarms/Basin/pull/97/files) | Yes |
+| [098](https://solodit.cyfrin.io/issues/h-03-wp-h0-fake-balances-can-be-created-for-not-yet-existing-erc20-tokens-which-allows-attackers-to-set-traps-to-steal-funds-from-future-users-code4rena-cally-cally-contest-git) | [2022-05-cally](https://github.com/code-423n4/2022-05-cally) | Fake token balances can be created for nonexistent ERC20s, enabling traps that steal funds from later users. | [H-03](https://github.com/code-423n4/2022-05-cally-findings/issues/225) | [PR5](https://github.com/outdoteth/cally/pull/5) | No |
+| **Total** | | | **23 Reports** | **M:15 H:8** | **Y:13 N:10** |
+
+*Table: Proof-of-Patch Dataset Overview*
 
 ## 🔍 What Makes This Dataset Special
 
 ### **Two-Tier Approach**
-- **Raw Dataset**: Comprehensive collection of 3,814+ audits with patch indicators
-- **Curated Dataset**: 23 manually verified findings for maximum research and educational value
+- **Curated Dataset**: 23 manually verified vulnerability reports from audit competitiond.
 
 ### **Patch-Focused Collection**
 - ✅ Audits with **GitHub commit references**
@@ -103,56 +64,22 @@ Each finding includes:
 - Repository links and main contracts
 - Patch references and test commands
 - Manual annotations with detailed summaries
-- Proof of concept implementations
 
 ## 📁 Dataset Structure
 
-### **Raw Dataset** (`raw_dataset/`)
 ```
-raw_dataset/
-├── results.json              # Raw scraped audit data from Solodit
-├── enriched_data.json        # AI-analyzed audit data
-├── prioritized_data.json     # Prioritized by patch value
-├── prioritized_data.csv      # CSV export for analysis
-├── cost_summary.json         # Processing cost breakdown
-└── disregarded_links.json    # Audits without patches
+findings/                 # 23 manually selected findings
+├── 001/                 # Individual finding directories
+├── 003/
+└── ...
+annotations/             # Manual annotations and summaries
+├── 001.txt
+├── 003.txt
+└── ...
+patches/                 # Implemented patches
+pocs/                    # Proof of concept exploits
+dataset_metadata.json    # Curated dataset metadata
 ```
-
-### **Curated Dataset** (`dataset/`)
-```
-dataset/
-├── findings/                 # 23 manually selected findings
-│   ├── 001/                 # Individual finding directories
-│   ├── 003/
-│   └── ...
-├── annotations/             # Manual annotations and summaries
-│   ├── 001.txt
-│   ├── 003.txt
-│   └── ...
-├── patches/                 # Implemented patches
-├── pocs/                    # Proof of concept exploits
-└── dataset_metadata.json    # Curated dataset metadata
-```
-
-## 🛠️ Tools & Pipeline
-
-### **Enhanced Scraper** (`solodit-scraper/scraper.py`)
-- Searches Solodit for audits with patch-related keywords
-- Detects GitHub commits, PRs, and mitigation sections
-- Maintains PoC detection alongside patch analysis
-- Incremental saving with progress tracking
-
-### **AI Parser** (`solodit-scraper/parser.py`)
-- Uses GPT-4o to analyze audit content
-- Evaluates PoC quality and mitigation strategies
-- Tracks token usage and costs
-- Generates quality metrics and patch scores
-
-### **Priority Scorer** (`solodit-scraper/priority.py`)
-- Ranks audits by patch/mitigation value
-- Categorizes as "patch_and_poc", "patch_only", "poc_only"
-- Generates CSV exports for analysis
-- Provides detailed statistics
 
 ## 🚀 Usage
 
@@ -164,130 +91,33 @@ The curated dataset is ready to use immediately:
 git clone https://github.com/sofiabobadilla/Proof-of-Patch.git
 cd proof-of-patch
 
+# Go to only-dataset branch
+git switch only-dataset
+
 # Explore curated findings
-ls dataset/findings/
+ls findings/
 
 # Read annotations for specific findings
-cat dataset/annotations/001.txt
+cat annotations/001.txt
 
 # Examine patches
-ls dataset/patches/
+ls patches/
 
-# View proof of concepts
-ls dataset/pocs/
 ```
-
-### **Reproducing the Raw Dataset**
-To recreate the raw dataset from Solodit:
-
-```bash
-# Navigate to scraper directory
-cd solodit-scraper
-
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate  # Linux/Mac
-# venv\Scripts\activate  # Windows
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Set up OpenAI API key (for parser)
-echo "OPENAI_API_KEY=your_api_key_here" > .env
-
-# Run the pipeline
-python scraper.py    # Scrape audits (requires Cyfrin login)
-python parser.py     # Analyze with AI
-python priority.py   # Prioritize results
-```
-
-### **Testing**
-```bash
-# Create test dataset (2 audits)
-python create_test.py setup
-python parser.py
-```
-
-## 📈 Key Metrics
-
-### **Priority Scoring System**
-- **Patch References**: 20 points (highest priority)
-- **Mitigation Proposals**: 15 points
-- **PoC Quality**: 12 points
-- **Technical Indicators**: 8-12 points each
-- **Impact Level**: 2-8 points
-
-### **Cost Analysis**
-- **Average cost per audit**: ~$0.007
-- **Total processing cost**: ~$26.70 for full dataset
-- **Token efficiency**: ~1,300 tokens per audit
-
-## 🎯 Research Applications
-
-### **Raw Dataset Applications**
-- **Large-scale Analysis**: Study patterns across 3,814+ audits
-- **AI/ML Training**: Train models on patch patterns and vulnerability types
-- **Trend Analysis**: Understand evolution of smart contract security
-- **Automated Tools**: Develop security analysis tools
-
-### **Curated Dataset Applications**
-- **Educational Resources**: Learn from carefully verified, high-quality examples
-- **Case Studies**: Deep dive into specific vulnerability patterns
-- **Research Benchmarks**: Use as ground truth for security research
-- **Developer Training**: Understand real-world vulnerability fixes
-
-## 📊 Dataset Categories
-
-### **Curated Findings by Vulnerability Type**
-- **Access Control** (5 findings): Improper access controls and authorization issues
-- **Logic Error** (5 findings): Flawed business logic and calculation errors
-- **Reentrancy** (5 findings): Classic reentrancy vulnerabilities
-- **Denial of Service** (3 findings): DoS attacks and blocking mechanisms
-- **Flash Loan** (1 finding): Flash loan attack vectors
-- **Price Oracle Manipulation** (1 finding): Oracle manipulation techniques
-- **Unchecked External Calls** (2 findings): Unsafe external contract interactions
-
-### **Raw Dataset by Patch Type**
-- `patch_and_poc`: Both patch and proof-of-concept
-- `patch_only`: Patch but no PoC
-- `poc_only`: PoC but no patch
-- `other`: Neither patch nor PoC
-
-
-
-## 🔧 Technical Details
-
-### **Dependencies**
-- Python 3.8+
-- Selenium (web scraping)
-- OpenAI API (AI analysis)
-- tiktoken (token counting)
-- pandas (data processing)
-
-### **Data Sources**
-- **Primary**: [Solodit](https://solodit.cyfrin.io/) - Cyfrin's audit database
-- **Enhancement**: AI analysis using GPT-4o
-- **Validation**: Manual quality assessment
-
-### **File Formats**
-- **JSON**: Structured data with full metadata
-- **CSV**: Tabular format for analysis
-- **Logs**: Detailed processing information
-
-## ⚠️ Important Notes
-
-- **Webpage Dependency**: Scraper depends on Solodit's HTML structure (current as of October 2025)
-- **API Costs**: AI analysis requires OpenAI API credits
-- **Login Required**: Cyfrin account needed for scraping
-- **Data Freshness**: Dataset reflects Solodit content at scraping time
-- **⚠️ Storage Warning**: When all submodules are downloaded, the project can reach a size of **10 GB** due to the large number of audit repositories included
-
 ## 📄 License & Citation
 
 This dataset is provided for research purposes. When using this data, please cite:
 
 ```
-TODO
+@misc{andersson20251pocoagenticproofofconcept,
+      title={1 PoCo: Agentic Proof-of-Concept Exploit Generation for Smart Contracts}, 
+      author={Vivi Andersson and Sofia Bobadilla and Harald Hobbelhagen and Martin Monperrus},
+      year={2025},
+      eprint={2511.02780},
+      archivePrefix={arXiv},
+      primaryClass={cs.CR},
+      url={https://arxiv.org/abs/2511.02780}, 
+}
 ```
 
 
