@@ -1,12 +1,11 @@
 # Proof-of-Patch Dataset
 
-**A curated dataset of smart contract vulnerability reports with patch/mitigation indicators from Solodit**
+- 🏆 **Purpose:** Designed for evaluating [PoCo](https://arxiv.org/abs/2511.02780) ("Agentic Proof-of-Concept Exploit Generation for Smart Contracts"):
+  - [Read the PoCo paper](https://arxiv.org/abs/2511.02780)
+  - [See PoCo evaluation results](https://github.com/ASSERT-KTH/PoCo-results)
+- 🐞 **23 curated vulnerabilities** — each with a **manually verified patch**
 
-Dataset used for the evaluation of PoCo (see [PoCo: Agentic Proof-of-Concept Exploit Generation for Smart Contracts](https://arxiv.org/abs/2511.02780)).
-
-## 📋 Curated Findings Table
-
-The following table presents the 23 most promising findings from our curated dataset, each manually verified and reviewed for their research value and educational potential.
+## 📊 Dataset Overview
 
 | ID | Project | Description | Audit Ref. | Patch Ref. | Has PoC |
 |----|---------|-------------|------------|------------|---------|
@@ -35,18 +34,11 @@ The following table presents the 23 most promising findings from our curated dat
 | [098](https://solodit.cyfrin.io/issues/h-03-wp-h0-fake-balances-can-be-created-for-not-yet-existing-erc20-tokens-which-allows-attackers-to-set-traps-to-steal-funds-from-future-users-code4rena-cally-cally-contest-git) | [2022-05-cally](https://github.com/code-423n4/2022-05-cally) | Fake token balances can be created for nonexistent ERC20s, enabling traps that steal funds from later users. | [H-03](https://github.com/code-423n4/2022-05-cally-findings/issues/225) | [PR5](https://github.com/outdoteth/cally/pull/5) | No |
 | **Total** | | | **23 Reports** | **M:15 H:8** | **Y:13 N:10** |
 
-*Table: Proof-of-Patch Dataset Overview*
 
-## 🔍 What Makes This Dataset Special
-
-### **Two-Tier Approach**
-- **Curated Dataset**: 23 manually verified vulnerability reports from audit competitiond.
-
-### **Patch-Focused Collection**
-- ✅ Audits with **GitHub commit references**
-- ✅ Audits with **pull request links**
-- ✅ Audits with **mitigation code examples**
-- ✅ Audits with **clear remediation strategies**
+### **🧩 Patch-Focused Dataset**
+- Audits linked to **GitHub commits** and **pull requests**  
+- Includes **mitigation examples** and verified **patch references**  
+- Documents **remediation strategies** from audit reports  
 
 ### **Quality Assessment**
 - **Proof of Concept (PoC)**: Code examples demonstrating vulnerabilities
@@ -54,7 +46,7 @@ The following table presents the 23 most promising findings from our curated dat
 - **Patch References**: Links to actual implementations
 - **Manual Annotations**: Detailed summaries and analysis for curated findings
 
-### **Comprehensive Metadata**
+### **🗂️ Metadata**
 Each finding includes:
 - Vulnerability type and difficulty level
 - Repository links and main contracts
@@ -100,7 +92,7 @@ cat annotations/001.txt
 ls patches/
 
 ```
-## 📄 License & Citation
+## 📄 Citation
 
 This dataset is provided for research purposes. When using this data, please cite:
 
@@ -114,6 +106,7 @@ This dataset is provided for research purposes. When using this data, please cit
       primaryClass={cs.CR},
       url={https://arxiv.org/abs/2511.02780}, 
 }
+
 ```
 ## ⚠️ YOU ARE ON THE "only-dataset" BRANCH
 Therefore, the scraping info and POCs are removed from the data. **For full dataset reproduction**, see [main branch](https://github.com/ASSERT-KTH/Proof-of-Patch/tree/main).
