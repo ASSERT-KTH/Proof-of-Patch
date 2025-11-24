@@ -1,11 +1,35 @@
-# Proof-of-Patch Dataset
+<div align="center">
 
-- 🏆 **Purpose:** Designed for evaluating [PoCo](https://arxiv.org/abs/2511.02780) ("Agentic Proof-of-Concept Exploit Generation for Smart Contracts"):
-  - [Read the PoCo paper](https://arxiv.org/abs/2511.02780)
-  - [See PoCo evaluation results](https://github.com/ASSERT-KTH/PoCo-results)
-- 🐞 **23 curated vulnerabilities** — each with a **manually verified patch**
+  <img src="pop.png" alt="Patch" width="180" height="180"/>
+
+
+  <h1>Proof-of-Patch Dataset</h1>
+  <h3>Curated Solidity vulnerabilities with verified patches</h3>
+
+  <p>
+    <a href="https://arxiv.org/abs/2511.02780">📑 <b>PoCo Paper</b></a> •
+    <a href="https://github.com/ASSERT-KTH/PoCo-results">📊 <b>Poco Results</b></a>
+  </p>
+
+  <p>
+    🐞 <b>23 curated smart contract vulnerabilities</b>each with a <b>manually verified patch</b>.  
+  </p>
+</div>
+
+Cite the paper or dataset:
+
+```bibtex
+@article{anderssonbobadilla2025poco,
+  title={PoCo: Agentic Proof-of-Concept Exploit Generation for Smart Contracts},
+  author={Andersson, Vivi and Bobadilla, Sofia and Hobbelhagen, Harald and Monperrus, Martin},
+  journal={arXiv preprint arXiv:2511.02780},
+  year={2025}
+}
+```
 
 ## 📊 Dataset Overview
+
+This repository provides 23 hand-curated Solidity/Foundry smart contract vulnerabilities, each with a manually verified patch and references to real-world audits. The focus is on actionable, audit-grade vulnerability instances and concrete mitigation implementations, organized for reproducibility and further research.
 
 | ID | Project | Description | Audit Ref. | Patch Ref. | Has PoC |
 |----|---------|-------------|------------|------------|---------|
@@ -35,85 +59,38 @@
 | **Total** | | | **23 Reports** | **M:15 H:8** | **Y:13 N:10** |
 
 
-### **🧩 Patch-Focused Dataset**
-- Audits linked to **GitHub commits** and **pull requests**  
-- Includes **mitigation examples** and verified **patch references**  
-- Documents **remediation strategies** from audit reports  
+---
 
-### **Quality Assessment**
-- **Proof of Concept (PoC)**: Code examples demonstrating vulnerabilities
-- **Mitigation Proposals**: Clear recommendations and solutions
-- **Patch References**: Links to actual implementations
-- **Manual Annotations**: Detailed summaries and analysis for curated findings
+### Dataset Features
 
-### **🗂️ Metadata**
-Each finding includes:
-- Vulnerability type and difficulty level
-- Repository links and main contracts
-- Patch references and test commands
-- Manual annotations with detailed summaries
+- Vulnerabilities include links to original audit reports, patch references (pull requests/commits), and PoC exploits (where applicable).
+- Each entry is manually validated and documented with annotations and step-by-step summaries.
+- Remediation strategies are drawn directly from the maintainers’ or auditors’ code/patch commits.
 
-## 📁 Dataset Structure
+### Quality Guarantees
 
-```
-findings/                 # 23 manually selected findings
-├── 001/                 # Individual finding directories
-├── 003/
-└── ...
-annotations/             # Manual annotations and summaries
-├── 001.txt
-├── 003.txt
-└── ...
-patches/                 # Implemented patches
-pocs/                    # Proof of concept exploits
-dataset_metadata.json    # Curated dataset metadata
-```
-
-## 🚀 Usage
-
-### **Using the Curated Dataset**
-The curated dataset is ready to use immediately:
-
-```bash
-# Clone repository
-git clone https://github.com/sofiabobadilla/Proof-of-Patch.git
-cd proof-of-patch
-
-# Go to only-dataset branch
-git switch only-dataset
-
-# Explore curated findings
-ls findings/
-
-# Read annotations for specific findings
-cat annotations/001.txt
-
-# Examine patches
-ls patches/
-
-```
-## 📄 Citation
-
-This dataset is provided for research purposes. When using this data, please cite:
-
-```
-@misc{andersson20251pocoagenticproofofconcept,
-      title={PoCo: Agentic Proof-of-Concept Exploit Generation for Smart Contracts}, 
-      author={Vivi Andersson and Sofia Bobadilla and Harald Hobbelhagen and Martin Monperrus},
-      year={2025},
-      eprint={2511.02780},
-      archivePrefix={arXiv},
-      primaryClass={cs.CR},
-      url={https://arxiv.org/abs/2511.02780}, 
-}
-
-```
-## ⚠️ YOU ARE ON THE "only-dataset" BRANCH
-Therefore, the scraping info and POCs are removed from the data. **For full dataset reproduction**, see [main branch](https://github.com/ASSERT-KTH/Proof-of-Patch/tree/main).
-
-
-
+- **Linked PoCs:** Example exploits are provided for critical findings when available.
+- **Mitigation References:** Patches reference concrete PRs or commit SHAs.
+- **Manual Summaries:** Each report includes a condensed summary and technical context for the vulnerability and patch.
 
 ---
 
-*This dataset represents a systematic approach to identifying and analyzing smart contract security audits with actionable remediation strategies, supporting the development of more secure blockchain applications.*
+## 📁 Repository Layout
+
+```
+findings/                 # 23 manually selected findings
+├── 001/                  # Directory for individual finding (full report, vulnerable & patched code, PoC)
+├── 003/
+└── ...
+annotations/              # Manual analyst summaries and context for each finding
+├── 001.txt
+├── 003.txt
+└── ...
+patches/                  # Standalone patch implementations
+pocs/                     # Proof of concept exploits
+dataset_metadata.json     # Machine-readable dataset index and metadata
+```
+
+## Reproduction Note
+For additional information, including the original scraping scripts and proof-of-concept (POC) exploits, please visit the [main branch](https://github.com/ASSERT-KTH/Proof-of-Patch/tree/main).
+
