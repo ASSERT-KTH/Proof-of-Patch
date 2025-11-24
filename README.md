@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="pop.png" alt="Patch" width="180" height="180"/>
+  <img src="pop.png" alt="Patch" width="64" height="64"/>
 
 
   <h1>Proof-of-Patch Dataset</h1>
