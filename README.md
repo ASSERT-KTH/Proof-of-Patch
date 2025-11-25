@@ -64,14 +64,14 @@ This repository provides 23 hand-curated Solidity/Foundry smart contract vulnera
 ### Dataset Features
 
 - Vulnerabilities include links to original audit reports, patch references (pull requests/commits), and PoC exploits (where applicable).
-- Each entry is manually validated and documented with annotations and step-by-step summaries.
+- Each entry is manually validated (valid finding, project setup ok).
 - Remediation strategies are drawn directly from the maintainers’ or auditors’ code/patch commits.
 
 ### Quality Guarantees
 
 - **Linked PoCs:** Example exploits are provided for critical findings when available.
 - **Mitigation References:** Patches reference concrete PRs or commit SHAs.
-- **Manual Summaries:** Each report includes a condensed summary and technical context for the vulnerability and patch.
+- **Human-written Annotations:** Each datapoint contains the vulnerability annotation ("report") as written by the human auditor and **accepted** by the dev team.
 
 ---
 
