@@ -12,7 +12,7 @@
   </p>
 
   <p>
-    🐞 <b>23 curated smart contract vulnerabilities</b>each with a <b>manually verified patch</b>.  
+    🐞 <b>23 recent smart contract vulnerabilities</b> each with a <b>manually verified ground-truth patch</b>.  
   </p>
 </div>
 
